@@ -190,7 +190,7 @@ const PRODUCTS = [
     category: "Roupas fitness",
     price: 79.90,
     icon: "🩳",
-    image: "images/legging-fitness.jpg",
+    image: "images./Screenshot_2026-10-28-22-46-26-577_com.mercadolibre.jpg",
     description: "Uma peça para sua rotina de exercícios.",
     keywords: ["legging", "roupa", "vestuário"]
   },
