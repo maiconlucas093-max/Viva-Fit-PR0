@@ -143,7 +143,17 @@ const PRODUCTS = [
     image: "images/garrafa-esportiva.jpg",
     description: "Uma companheira prática para sua rotina de hidratação.",
     keywords: ["hidratação", "água", "garrafa"]
-  },
+  },{
+  id: "legging-fitness",
+  name: "Legging fitness",
+  category: "Roupas fitness",
+  price: 79.90,
+  icon: "🩳",
+  image: "images/legging-fitness.jpg",
+  affiliateUrl: "COLE_AQUI_SEU_LINK_DE_AFILIADO",
+  description: "Uma peça para sua rotina de exercícios.",
+  keywords: ["legging", "roupa", "vestuário"]
+  }
   {
     id: "copo-fitness",
     name: "Copo fitness",
