@@ -1,1 +1,4 @@
+User-agent: *
+Allow: /
 
+Sitemap: https://maiconlucas093-max.github.io/Viva-Fit-PR0/sitemap.xml
