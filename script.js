@@ -134,6 +134,8 @@ settings = {
 */
 
 const PRODUCTS = [
+
+const PRODUCTS = [
   {
     id: "garrafa-esportiva",
     name: "Garrafa esportiva",
@@ -143,17 +145,18 @@ const PRODUCTS = [
     image: "images/garrafa-esportiva.jpg",
     description: "Uma companheira prática para sua rotina de hidratação.",
     keywords: ["hidratação", "água", "garrafa"]
-  },{
-  id: "legging-fitness",
-  name: "Legging fitness",
-  category: "Roupas fitness",
-  price: 79.90,
-  icon: "🩳",
-  image: "images/legging-fitness.jpg",
-  affiliateUrl: "COLE_AQUI_SEU_LINK_DE_AFILIADO",
-  description: "Uma peça para sua rotina de exercícios.",
-  keywords: ["legging", "roupa", "vestuário"]
-  }
+  },
+  {
+    id: "legging-fitness",
+    name: "Legging fitness",
+    category: "Roupas fitness",
+    price: 79.90,
+    icon: "🩳",
+    image: "Screenshot_2026-10-28-22-46-26-577_com.mercadolibre.jpg",
+    affiliateUrl: "COLE_AQUI_SEU_LINK_DE_AFILIADO",
+    description: "Uma peça para sua rotina de exercícios.",
+    keywords: ["legging", "roupa", "vestuário"]
+  },
   {
     id: "copo-fitness",
     name: "Copo fitness",
@@ -195,16 +198,6 @@ const PRODUCTS = [
     keywords: ["roupa", "camiseta", "vestuário"]
   },
   {
-    id: "legging-fitness",
-    name: "Legging fitness",
-    category: "Roupas fitness",
-    price: 79.90,
-    icon: "🩳",
-    image: "images./Screenshot_2026-10-28-22-46-26-577_com.mercadolibre.jpg",
-    description: "Uma peça para sua rotina de exercícios.",
-    keywords: ["legging", "roupa", "vestuário"]
-  },
-  {
     id: "toalha-esportiva",
     name: "Toalha esportiva",
     category: "Acessórios",
@@ -225,6 +218,7 @@ const PRODUCTS = [
     keywords: ["bolsa", "academia", "acessórios"]
   }
 ];
+
 
 /* ---------- Blog inicial ---------- */
 
