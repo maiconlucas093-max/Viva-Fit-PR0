@@ -953,6 +953,8 @@ $("#blogGrid").addEventListener("click", event => {
       window.location.href = "blog-rotina-de-hidratacao.html";
     } else if (articleId === "blog-corda") {
       window.location.href = "blog-corda-de-pular.html";
+    } else if (articleId === "blog-resistencia") {
+      window.location.href = "blog-elasticos-de-resistencia.html";
     } else {
       openArticle(articleId);
     }
