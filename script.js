@@ -944,7 +944,15 @@ $("#blogGrid").addEventListener("click", event => {
   const readButton = event.target.closest("[data-read-article]");
   const deleteButton = event.target.closest("[data-delete-article]");
 
-  if (readButton) openArticle(readButton.dataset.readArticle);
+if (readButton) {
+  const articleId = readButton.dataset.readArticle;
+
+  if (articleId === "blog-inicio-treino") {
+    window.location.href = "blog-como-comecar-treinos-em-casa.html";
+  } else {
+    openArticle(articleId);
+  }
+}
 
   if (deleteButton) {
     if (!confirm("Deseja excluir este artigo?")) return;
