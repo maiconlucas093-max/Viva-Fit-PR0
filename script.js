@@ -955,6 +955,8 @@ $("#blogGrid").addEventListener("click", event => {
       window.location.href = "blog-corda-de-pular.html";
     } else if (articleId === "blog-resistencia") {
       window.location.href = "blog-elasticos-de-resistencia.html";
+    } else if (articleId === "blog-roupa") {
+      window.location.href = "blog-roupas-confortaveis-para-treinar.html";
     } else {
       openArticle(articleId);
     }
