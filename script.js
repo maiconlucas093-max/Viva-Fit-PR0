@@ -975,8 +975,6 @@ function relatedProduct(article) {
   return null;
 }
 
-function openArticle(id) {
-
 
 function openArticle(id) {
   const article = articles.find(item => item.id === id);
@@ -991,12 +989,10 @@ function openArticle(id) {
     <p class="article-meta">VivaFit Blog · ${formatDate(article.date)}</p>
 
     ${article.image ? `
-      <img
-        class="article-cover"
+      <img class="article-cover"
         src="${escapeHTML(article.image)}"
         alt="${escapeHTML(article.title)}"
-        data-fallback-hide="true"
-      >
+        data-fallback-hide="true">
     ` : ""}
 
     <p><strong>${escapeHTML(article.description)}</strong></p>
@@ -1010,8 +1006,7 @@ function openArticle(id) {
         <strong>Produto recomendado para você</strong>
         <p>${escapeHTML(product.name)} — ${escapeHTML(product.description)}</p>
 
-        <a
-          class="btn btn-primary"
+        <a class="btn btn-primary"
           href="${escapeHTML(
             product.affiliateUrl &&
             !product.affiliateUrl.includes("COLE_AQUI")
@@ -1020,8 +1015,7 @@ function openArticle(id) {
                 encodeURIComponent(product.name)
           )}"
           target="_blank"
-          rel="noopener noreferrer"
-        >
+          rel="noopener noreferrer">
           Ver no Mercado Livre
         </a>
       </div>
@@ -1032,7 +1026,8 @@ function openArticle(id) {
   document.body.style.overflow = "hidden";
   attachImageFallbacks(body);
 }
-   
+
+
 function closeArticle() {
   $("#articleBackdrop").classList.remove("visible");
   document.body.style.overflow = "";
