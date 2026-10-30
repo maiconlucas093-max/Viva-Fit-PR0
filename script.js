@@ -1023,7 +1023,7 @@ function openArticle(id) {
                 encodeURIComponent(product.name)
           )}"
           target="_blank"
-          rel="noopener noreferrer">
+rel="noopener noreferrer sponsored nofollow">
           Ver no Mercado Livre
         </a>
       </div>
