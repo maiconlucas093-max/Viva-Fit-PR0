@@ -958,14 +958,28 @@ $("#blogGrid").addEventListener("click", event => {
 function relatedProduct(article) {
   const text = `${article.title} ${article.category} ${article.description}`.toLocaleLowerCase("pt-BR");
 
-  if (/corda|pular/.test(text)) return PRODUCTS.find(item => item.id === "corda-pular");
+  if (/corda|pular/.test(text)) {
+    return PRODUCTS.find(item => item.id === "corda-pular");
+  }
+
   if (/hidrata|água|agua|bebida|copo/.test(text)) {
     return /copo/.test(text)
       ? PRODUCTS.find(item => item.id === "copo-fitness")
       : PRODUCTS.find(item => item.id === "garrafa-esportiva");
   }
-  if (/elástico|elastico|resistência|resistencia/.test(text)) return PRODUCTS.find(item => item.id === "elastico-resistencia");
-  if (/roupa|vestuário|vestuario|camiseta|legging/.test(text)) return PRODUCTS.find(item => item.id === "camiseta-fitness");
+
+  if (/elástico|elastico|resistência|resistencia/.test(text)) {
+    return PRODUCTS.find(item => item.id === "elastico-resistencia");
+  }
+
+  if (/legging/.test(text)) {
+    return PRODUCTS.find(item => item.id === "legging-fitness");
+  }
+
+  if (/roupa|vestuário|vestuario|camiseta/.test(text)) {
+    return PRODUCTS.find(item => item.id === "camiseta-fitness");
+  }
+
   return null;
 }
 
