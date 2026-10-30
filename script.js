@@ -944,7 +944,7 @@ $("#blogGrid").addEventListener("click", event => {
   const readButton = event.target.closest("[data-read-article]");
   const deleteButton = event.target.closest("[data-delete-article]");
 
-  if (readButton) {
+if (readButton) {
     const articleId = readButton.dataset.readArticle;
 
     if (articleId === "blog-inicio-treino") {
@@ -957,10 +957,12 @@ $("#blogGrid").addEventListener("click", event => {
       window.location.href = "blog-elasticos-de-resistencia.html";
     } else if (articleId === "blog-roupa") {
       window.location.href = "blog-roupas-confortaveis-para-treinar.html";
+    } else if (articleId === "blog-consistencia") {
+      window.location.href = "blog-como-construir-consistencia.html";
     } else {
       openArticle(articleId);
     }
-  }
+}
 
   if (deleteButton) {
     if (!confirm("Deseja excluir este artigo?")) return;
