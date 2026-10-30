@@ -133,7 +133,7 @@ settings = {
    Se a imagem não carregar, o sistema mostra um ícone alternativo.
 */
 
-const PRODUCTS = [
+
 
 const PRODUCTS = [
   {
