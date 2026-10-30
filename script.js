@@ -153,7 +153,7 @@ const PRODUCTS = [
     price: 79.90,
     icon: "🩳",
     image: "Screenshot_2026-10-28-22-46-26-577_com.mercadolibre.jpg",
-    affiliateUrl: "COLE_AQUI_SEU_LINK_DE_AFILIADO",
+    affiliateUrl: "https://meli.la/2kpLNdG",
     description: "Uma peça para sua rotina de exercícios.",
     keywords: ["legging", "roupa", "vestuário"]
   },
