@@ -951,6 +951,8 @@ $("#blogGrid").addEventListener("click", event => {
       window.location.href = "blog-como-comecar-treinos-em-casa.html";
     } else if (articleId === "blog-hidratacao") {
       window.location.href = "blog-rotina-de-hidratacao.html";
+    } else if (articleId === "blog-corda") {
+      window.location.href = "blog-corda-de-pular.html";
     } else {
       openArticle(articleId);
     }
