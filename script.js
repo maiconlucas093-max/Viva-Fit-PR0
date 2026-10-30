@@ -976,6 +976,9 @@ function relatedProduct(article) {
 }
 
 function openArticle(id) {
+
+
+function openArticle(id) {
   const article = articles.find(item => item.id === id);
   if (!article) return;
 
@@ -986,14 +989,41 @@ function openArticle(id) {
     <span class="category-tag">${escapeHTML(article.category)}</span>
     <h1 id="modalArticleTitle">${escapeHTML(article.title)}</h1>
     <p class="article-meta">VivaFit Blog · ${formatDate(article.date)}</p>
-    ${article.image ? `<img class="article-cover" src="${escapeHTML(article.image)}" alt="${escapeHTML(article.title)}" data-fallback-hide="true">` : ""}
+
+    ${article.image ? `
+      <img
+        class="article-cover"
+        src="${escapeHTML(article.image)}"
+        alt="${escapeHTML(article.title)}"
+        data-fallback-hide="true"
+      >
+    ` : ""}
+
     <p><strong>${escapeHTML(article.description)}</strong></p>
-    <div class="article-content">${escapeHTML(article.content).replace(/\n/g, "<br>")}</div>
+
+    <div class="article-content">
+      ${escapeHTML(article.content).replace(/\n/g, "<br>")}
+    </div>
+
     ${product ? `
       <div class="article-product-link">
-        <strong>Conheça um produto relacionado</strong>
+        <strong>Produto recomendado para você</strong>
         <p>${escapeHTML(product.name)} — ${escapeHTML(product.description)}</p>
-        <button class="btn btn-primary" data-article-product="${escapeHTML(product.id)}">Ver produto · ${money(product.price)}</button>
+
+        <a
+          class="btn btn-primary"
+          href="${escapeHTML(
+            product.affiliateUrl &&
+            !product.affiliateUrl.includes("COLE_AQUI")
+              ? product.affiliateUrl
+              : "https://lista.mercadolivre.com.br/" +
+                encodeURIComponent(product.name)
+          )}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ver no Mercado Livre
+        </a>
       </div>
     ` : ""}
   `;
@@ -1002,7 +1032,7 @@ function openArticle(id) {
   document.body.style.overflow = "hidden";
   attachImageFallbacks(body);
 }
-
+   
 function closeArticle() {
   $("#articleBackdrop").classList.remove("visible");
   document.body.style.overflow = "";
