@@ -1,8 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://maiconlucas093-max.github.io/Viva-Fit-PR0/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <url>
+    <loc>https://maiconlucas093-max.github.io/Viva-Fit-PR0/blog-como-comecar-treinos-em-casa.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://maiconlucas093-max.github.io/Viva-Fit-PR0/blog-rotina-de-hidratacao.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://maiconlucas093-max.github.io/Viva-Fit-PR0/blog-corda-de-pular.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://maiconlucas093-max.github.io/Viva-Fit-PR0/blog-elasticos-de-resistencia.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://maiconlucas093-max.github.io/Viva-Fit-PR0/blog-roupas-confortaveis-para-treinar.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://maiconlucas093-max.github.io/Viva-Fit-PR0/blog-como-construir-consistencia.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
