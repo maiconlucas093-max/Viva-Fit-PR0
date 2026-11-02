@@ -2186,7 +2186,7 @@ init();
     }
 
     const now = Date.now();
-    const threshold = 1.5;
+    const threshold = 2.0;
 
     if (magnitude > threshold && !inPeak) {
       inPeak = true;
