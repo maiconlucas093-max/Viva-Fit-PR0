@@ -2176,57 +2176,78 @@ init();
   }
 
   function startGpsTracking() {
+    
+      function startGpsTracking() {
     if (!navigator.geolocation) {
       setSessionStatus("Este navegador não oferece suporte ao GPS.");
       return false;
     }
-
-    lastGpsPosition = null;
-
+    
+    // Evita iniciar dois rastreamentos simultaneamente.
+    stopGpsTracking();
+    
+    // Prepara o histórico do percurso.
+    if (!Array.isArray(session.gpsRoute)) {
+      session.gpsRoute = [];
+    }
+    
     gpsWatchId = navigator.geolocation.watchPosition(
       position => {
         if (!session || session.status !== "running") return;
-
+        
         const accuracy = position.coords.accuracy;
-
+        
         if (!Number.isFinite(accuracy) || accuracy > 20) {
           setSessionStatus("Aguardando um sinal GPS mais preciso...");
           return;
         }
-
+        
         const current = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           timestamp: position.timestamp
         };
-
-        if (lastGpsPosition) {
+        
+        let addRoutePoint = false;
+        
+        if (!lastGpsPosition) {
+          addRoutePoint = session.gpsRoute.length === 0;
+        } else {
           const distance = calculateGpsDistance(
             lastGpsPosition.latitude,
             lastGpsPosition.longitude,
             current.latitude,
             current.longitude
           );
-
+          
           const elapsed =
             (current.timestamp - lastGpsPosition.timestamp) / 1000;
-
+          
           const speed = elapsed > 0 ? distance / elapsed : 0;
-
+          
           if (distance >= 3 && speed <= 8) {
             session.gpsDistanceMeters =
               (session.gpsDistanceMeters || 0) + distance;
-
-            persist();
+            
+            addRoutePoint = true;
+            
             updateUI();
           }
         }
-
+        
+        updateGpsMaps(current, addRoutePoint);
+        
+        if (addRoutePoint) {
+          persist();
+        }
+        
         lastGpsPosition = current;
+        
         setSessionStatus("GPS ativo. Distância sendo registrada.");
       },
       error => {
         console.warn("Erro no GPS:", error);
+        
         setSessionStatus(
           "Não foi possível obter o GPS. Verifique a localização do aparelho."
         );
@@ -2237,7 +2258,7 @@ init();
         timeout: 15000
       }
     );
-
+    
     return true;
   }
 
