@@ -1951,6 +1951,92 @@ init();
     // Controle do rastreamento por GPS.
   let gpsWatchId = null;
   let lastGpsPosition = null;
+    // =====================================
+  // MAPAS INTERATIVOS DO VIVAFIT PRO
+  // =====================================
+  
+  let sessionLeafletMap = null;
+  let gpsLeafletMap = null;
+  
+  let sessionGpsMarker = null;
+  let gpsPageMarker = null;
+  
+  let sessionGpsRoute = null;
+  let gpsPageRoute = null;
+  
+  function initializeGpsMaps() {
+    const sessionMapElement = document.getElementById("sessionMap");
+    const gpsMapElement = document.getElementById("gpsMap");
+    
+    if (typeof L === "undefined") {
+      console.warn("Leaflet não foi carregado.");
+      return;
+    }
+    
+    const initialCenter = [-15.78, -47.93];
+    
+    const mapOptions = {
+      zoomControl: true,
+      scrollWheelZoom: true
+    };
+    
+    if (sessionMapElement) {
+      sessionLeafletMap = L.map(
+        sessionMapElement,
+        mapOptions
+      ).setView(initialCenter, 5);
+      
+      L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          maxZoom: 19
+        }
+      ).addTo(sessionLeafletMap);
+      
+      sessionGpsRoute = L.polyline([], {
+        color: "#b9f36b",
+        weight: 5,
+        opacity: 0.9
+      }).addTo(sessionLeafletMap);
+    }
+    
+    if (gpsMapElement) {
+      gpsLeafletMap = L.map(
+        gpsMapElement,
+        mapOptions
+      ).setView(initialCenter, 5);
+      
+      L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          maxZoom: 19
+        }
+      ).addTo(gpsLeafletMap);
+      
+      gpsPageRoute = L.polyline([], {
+        color: "#b9f36b",
+        weight: 5,
+        opacity: 0.9
+      }).addTo(gpsLeafletMap);
+    }
+  }
+  
+  initializeGpsMaps();
+  
+  // Corrige o tamanho do mapa ao abrir a tela GPS.
+  window.addEventListener("hashchange", () => {
+    if (window.location.hash === "#gps") {
+      setTimeout(() => {
+        if (gpsLeafletMap) {
+          gpsLeafletMap.invalidateSize();
+        }
+      }, 250);
+    }
+  });
+  
+  // FIM DA INICIALIZAÇÃO DOS MAPAS
 
   // Uma sessão que estava rodando é pausada ao reabrir a página.
   if (session && session.status === "running") {
