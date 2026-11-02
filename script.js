@@ -1888,6 +1888,8 @@ init();
   const dailyCalories = document.getElementById("dailyStepsCalories");
   const dailyStatus = document.getElementById("dailyStepsStatus");
 
+const walkingHistory = document.getElementById("walkingHistory");
+
   const sessionNumber = document.getElementById("sessionSteps");
   const sessionTime = document.getElementById("sessionTime");
   const sessionDistance = document.getElementById("sessionDistance");
@@ -2284,6 +2286,72 @@ init();
       String(seconds).padStart(2, "0")
     ].join(":");
   }
+    function renderWalkingHistory() {
+    if (!walkingHistory) return;
+    
+    walkingHistory.replaceChildren();
+    
+    const sessions = Array.isArray(data.sessions) ?
+      [...data.sessions].reverse() :
+      [];
+    
+    if (sessions.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.textContent = "Ainda não há caminhadas concluídas.";
+      walkingHistory.appendChild(empty);
+      return;
+    }
+    
+    sessions.forEach(item => {
+      const row = document.createElement("div");
+      row.className = "recent-row";
+      
+      const title = document.createElement("div");
+      const date = document.createElement("strong");
+      
+      const parsedDate = item.date ?
+        new Date(item.date + "T12:00:00") :
+        null;
+      
+      date.textContent = parsedDate && !Number.isNaN(parsedDate.getTime()) ?
+        parsedDate.toLocaleDateString("pt-BR") :
+        "Caminhada registrada";
+      
+      const details = document.createElement("div");
+      
+      const steps = formatNumber(item.steps || 0);
+      const distance = Number(item.distanceKm || 0).toLocaleString(
+        "pt-BR",
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+      
+      const duration = formatTime(item.durationMs || 0);
+      
+      details.textContent =
+        steps + " passos · " +
+        distance + " km · " +
+        duration;
+      
+      const route = document.createElement("div");
+      const hasRoute = Array.isArray(item.gpsRoute) &&
+        item.gpsRoute.length > 1;
+      
+      route.textContent = hasRoute ?
+        "Trajeto GPS registrado" :
+        "Sem trajeto GPS registrado";
+      
+      title.appendChild(date);
+      row.appendChild(title);
+      row.appendChild(details);
+      row.appendChild(route);
+      
+      walkingHistory.appendChild(row);
+    });
+  }
 
   function updateUI() {
     if (data.date !== localDate()) {
@@ -2639,6 +2707,7 @@ init();
     session = null;
 
     persist();
+    renderWalkingHistory();
     stopSensorIfIdle();
 
     setSessionStatus(
@@ -2657,9 +2726,10 @@ init();
     }
   }, 1000);
 
-  updateUI();
+    updateUI();
+  renderWalkingHistory();
   persist();
-
+  
   if (session && session.status === "paused") {
     setSessionStatus("Caminhada pausada. Você pode continuar ou finalizar.");
   } else {
