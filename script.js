@@ -2186,7 +2186,7 @@ init();
     }
 
     const now = Date.now();
-    const threshold = 1.15;
+    const threshold = 1.5;
 
     if (magnitude > threshold && !inPeak) {
       inPeak = true;
@@ -2204,7 +2204,7 @@ init();
       const peakTimedOut = now - peakStartedAt > 700;
 
       if (peakFinished || peakTimedOut) {
-        if (now - lastStepAt > 320) {
+        if (now - lastStepAt > 450) {
           registerStep();
           lastStepAt = now;
         }
