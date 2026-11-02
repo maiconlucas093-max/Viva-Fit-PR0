@@ -2076,6 +2076,41 @@ init();
   const dailyButton = createButton("Ativar contagem diária");
   dailyButton.style.width = "100%";
   dailyStatus.insertAdjacentElement("afterend", dailyButton);
+  
+  // Botão para zerar a contagem diária.
+  const resetDailyButton = createButton("↺ Zerar passos de hoje");
+  resetDailyButton.className = "btn btn-secondary btn-small";
+  resetDailyButton.style.width = "100%";
+  resetDailyButton.style.marginTop = "10px";
+
+  dailyButton.insertAdjacentElement("afterend", resetDailyButton);
+
+  resetDailyButton.addEventListener("click", () => {
+    // Protege os dados de uma caminhada ainda não finalizada.
+    if (session) {
+      setStatus("Finalize sua caminhada antes de zerar os passos diários.");
+      return;
+    }
+
+    const confirmed = confirm(
+      "Deseja realmente zerar os passos de hoje? Essa ação não poderá ser desfeita."
+    );
+
+    if (!confirmed) return;
+
+    // Interrompe a contagem antes de zerar.
+    dailyActive = false;
+    stopSensorIfIdle();
+
+    // Zera somente os passos do dia.
+    data.steps = 0;
+
+    persist();
+    updateUI();
+
+    setStatus("Contagem diária zerada. Você pode começar novamente!");
+  });
+
 
   const sessionStatus = sessionCard.querySelector(".steps-status");
   sessionStatus.id = "sessionStepsStatus";
