@@ -177,16 +177,19 @@ const PRODUCTS = [
     description: "Acessório versátil para exercícios e condicionamento.",
     keywords: ["cardio", "corda", "treino em casa"]
   },
+  
   {
-    id: "elastico-resistencia",
-    name: "Elástico de resistência",
-    category: "Treino",
-    price: 29.90,
-    icon: "💪",
-    image: "images/elastico-resistencia.jpg",
-    description: "Um acessório compacto para exercícios de resistência.",
-    keywords: ["resistência", "força", "elástico"]
-  },
+  id: "elastico-resistencia",
+  name: "Elástico de resistência",
+  category: "Treino",
+  price: 29.90,
+  icon: "💪",
+  image: "images/elastico-resistencia.jpg",
+  affiliateUrl: "https://meli.la/1jhD3Hk",
+  description: "Um acessório compacto para exercícios de resistência.",
+  keywords: ["resistência", "força", "elástico"]
+},
+  
   {
     id: "camiseta-fitness",
     name: "Camiseta fitness",
