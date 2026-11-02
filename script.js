@@ -2392,9 +2392,11 @@ init();
       session.startedAt = null;
       session.status = "paused";
 
+            stopGpsTracking();
       persist();
       stopSensorIfIdle();
       setSessionStatus("Caminhada pausada.");
+      
       updateUI();
       return;
     }
