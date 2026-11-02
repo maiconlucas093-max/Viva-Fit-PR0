@@ -2426,20 +2426,27 @@ init();
     setSessionStatus("Caminhada em andamento.");
     persist();
     updateUI();
+    startGpsTracking();
   });
 
   finishButton.addEventListener("click", () => {
     if (!session) return;
 
-    if (session.status === "running") {
+        if (session.status === "running") {
       session.elapsedMs += Date.now() - session.startedAt;
     }
+    
+    stopGpsTracking();
 
     const finished = {
       date: session.date,
       steps: session.steps || 0,
       durationMs: session.elapsedMs || 0,
-      distanceKm: (session.steps || 0) * STEP_LENGTH_METERS / 1000
+            distanceKm: (
+        session.gpsDistanceMeters > 0 ?
+        session.gpsDistanceMeters :
+        (session.steps || 0) * STEP_LENGTH_METERS
+      ) / 1000
     };
 
     data.sessions.push(finished);
