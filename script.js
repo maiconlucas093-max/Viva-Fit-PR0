@@ -338,8 +338,19 @@ Use as metas do VivaFit Pro como ferramenta de organização, e não como motivo
 
 if (!Array.isArray(articles)) {
   articles = INITIAL_ARTICLES;
-  save(VF.keys.articles, articles);
+} else {
+  INITIAL_ARTICLES.forEach(initialArticle => {
+    const savedArticle = articles.find(
+      article => article.id === initialArticle.id
+    );
+    
+    if (savedArticle && initialArticle.image) {
+      savedArticle.image = initialArticle.image;
+    }
+  });
 }
+
+save(VF.keys.articles, articles);
 
 /* ---------- Navegação e data ---------- */
 
