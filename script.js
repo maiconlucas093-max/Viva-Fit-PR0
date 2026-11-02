@@ -346,6 +346,29 @@ if (!Array.isArray(articles)) {
 function initNavigation() {
   const toggle = $("#menuToggle");
   const nav = $("#navigation");
+  
+  const homeView = document.getElementById("homeView");
+  const contentView = document.getElementById("contentView");
+
+  function updateAppViews(hash = window.location.hash) {
+    const showContent = hash === "#blog" || hash === "#loja";
+
+    if (homeView) homeView.hidden = showContent;
+    if (contentView) contentView.hidden = !showContent;
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener("click", () => {
+      updateAppViews(link.getAttribute("href"));
+    });
+  });
+
+  window.addEventListener("hashchange", () => {
+    updateAppViews();
+  });
+
+  updateAppViews();
+
 
   toggle.addEventListener("click", () => {
     const open = nav.classList.toggle("open");
