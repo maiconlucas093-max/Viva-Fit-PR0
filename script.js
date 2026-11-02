@@ -2134,9 +2134,15 @@ init();
         Math.round(data.steps * KCAL_PER_STEP) + " kcal";
     }
 
-    if (session) {
+        if (session) {
       sessionNumber.textContent = formatNumber(session.steps || 0);
-      sessionDistance.textContent = formatDistance(session.steps || 0);
+      
+      const gpsMeters = session.gpsDistanceMeters || 0;
+      
+      sessionDistance.textContent = gpsMeters > 0 ?
+        formatGpsDistance(gpsMeters) :
+        formatDistance(session.steps || 0);
+      
       sessionTime.textContent = formatTime(sessionElapsed());
     } else {
       sessionNumber.textContent = "0";
