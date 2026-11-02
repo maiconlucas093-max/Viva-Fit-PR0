@@ -2175,7 +2175,7 @@ init();
     lastGpsPosition = null;
   }
 
-  function startGpsTracking() {
+
     
       function startGpsTracking() {
     if (!navigator.geolocation) {
