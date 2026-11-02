@@ -38,6 +38,9 @@ h3 { font-size: 1.08rem; letter-spacing: -.02em; }
 p { color: var(--muted); }
 section[id] { scroll-margin-top: 85px; }
 .section-wrap { width: min(1160px, calc(100% - 40px)); margin-inline: auto; }
+.app-view[hidden] {
+  display: none !important;
+}
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
 .topbar {
