@@ -1947,6 +1947,10 @@ init();
 
   let gravity = null;
   let session = data.activeSession || null;
+  
+    // Controle do rastreamento por GPS.
+  let gpsWatchId = null;
+  let lastGpsPosition = null;
 
   // Uma sessão que estava rodando é pausada ao reabrir a página.
   if (session && session.status === "running") {
@@ -1975,6 +1979,106 @@ init();
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }) + " km";
+  }
+    function formatGpsDistance(meters) {
+    return (meters / 1000).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }) + " km";
+  }
+
+  function calculateGpsDistance(lat1, lon1, lat2, lon2) {
+    const radius = 6371000;
+    const toRadians = value => value * Math.PI / 180;
+
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRadians(lat1)) *
+      Math.cos(toRadians(lat2)) *
+      Math.sin(dLon / 2) ** 2;
+
+    return 2 * radius * Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1 - a)
+    );
+  }
+
+  function stopGpsTracking() {
+    if (gpsWatchId !== null) {
+      navigator.geolocation.clearWatch(gpsWatchId);
+      gpsWatchId = null;
+    }
+
+    lastGpsPosition = null;
+  }
+
+  function startGpsTracking() {
+    if (!navigator.geolocation) {
+      setSessionStatus("Este navegador não oferece suporte ao GPS.");
+      return false;
+    }
+
+    lastGpsPosition = null;
+
+    gpsWatchId = navigator.geolocation.watchPosition(
+      position => {
+        if (!session || session.status !== "running") return;
+
+        const accuracy = position.coords.accuracy;
+
+        if (!Number.isFinite(accuracy) || accuracy > 20) {
+          setSessionStatus("Aguardando um sinal GPS mais preciso...");
+          return;
+        }
+
+        const current = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          timestamp: position.timestamp
+        };
+
+        if (lastGpsPosition) {
+          const distance = calculateGpsDistance(
+            lastGpsPosition.latitude,
+            lastGpsPosition.longitude,
+            current.latitude,
+            current.longitude
+          );
+
+          const elapsed =
+            (current.timestamp - lastGpsPosition.timestamp) / 1000;
+
+          const speed = elapsed > 0 ? distance / elapsed : 0;
+
+          if (distance >= 3 && speed <= 8) {
+            session.gpsDistanceMeters =
+              (session.gpsDistanceMeters || 0) + distance;
+
+            persist();
+            updateUI();
+          }
+        }
+
+        lastGpsPosition = current;
+        setSessionStatus("GPS ativo. Distância sendo registrada.");
+      },
+      error => {
+        console.warn("Erro no GPS:", error);
+        setSessionStatus(
+          "Não foi possível obter o GPS. Verifique a localização do aparelho."
+        );
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 1000,
+        timeout: 15000
+      }
+    );
+
+    return true;
   }
 
   function sessionElapsed() {
