@@ -1866,3 +1866,466 @@ init();
 
   render();
 })();
+
+/* =========================================================
+   VIVAFIT PRO — CONTADOR DE PASSOS
+   Módulo independente de sensores e caminhadas.
+   ========================================================= */
+
+(() => {
+  "use strict";
+
+  const STORAGE_KEY = "vivafit_steps_v1";
+  const DAILY_GOAL = 8000;
+  const STEP_LENGTH_METERS = 0.75;
+  const KCAL_PER_STEP = 0.04;
+
+  const dailyNumber = document.getElementById("dailySteps");
+  const dailyBar = document.getElementById("dailyStepsBar");
+  const dailyGoal = document.getElementById("dailyStepsGoal");
+  const dailyPercent = document.getElementById("dailyStepsPercent");
+  const dailyDistance = document.getElementById("dailyStepsDistance");
+  const dailyCalories = document.getElementById("dailyStepsCalories");
+  const dailyStatus = document.getElementById("dailyStepsStatus");
+
+  const sessionNumber = document.getElementById("sessionSteps");
+  const sessionTime = document.getElementById("sessionTime");
+  const sessionDistance = document.getElementById("sessionDistance");
+  const sessionCard = document.querySelector(".steps-session");
+
+  if (!dailyNumber || !sessionNumber || !dailyStatus || !sessionCard) {
+    console.warn("VivaFit: área do contador de passos não encontrada.");
+    return;
+  }
+
+  function localDate() {
+    const d = new Date();
+    return [
+      d.getFullYear(),
+      String(d.getMonth() + 1).padStart(2, "0"),
+      String(d.getDate()).padStart(2, "0")
+    ].join("-");
+  }
+
+  function readData() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+      if (saved && typeof saved === "object") {
+        return saved;
+      }
+    } catch (error) {
+      console.warn("Não foi possível recuperar os passos:", error);
+    }
+
+    return {
+      date: localDate(),
+      steps: 0,
+      goal: DAILY_GOAL,
+      sessions: [],
+      activeSession: null
+    };
+  }
+
+  const data = readData();
+
+  if (!Number.isFinite(data.steps) || data.steps < 0) data.steps = 0;
+  if (!Number.isFinite(data.goal) || data.goal < 1) data.goal = DAILY_GOAL;
+  if (!Array.isArray(data.sessions)) data.sessions = [];
+
+  if (data.date !== localDate()) {
+    data.date = localDate();
+    data.steps = 0;
+  }
+
+  let dailyActive = false;
+  let sensorAttached = false;
+  let inPeak = false;
+  let peakValue = 0;
+  let peakStartedAt = 0;
+  let lastStepAt = 0;
+
+  let gravity = null;
+  let session = data.activeSession || null;
+
+  // Uma sessão que estava rodando é pausada ao reabrir a página.
+  if (session && session.status === "running") {
+    session.elapsedMs += Date.now() - session.startedAt;
+    session.startedAt = null;
+    session.status = "paused";
+  }
+
+  function persist() {
+    data.activeSession = session;
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error("Erro ao salvar o contador de passos:", error);
+    }
+  }
+
+  function formatNumber(value) {
+    return Math.round(value).toLocaleString("pt-BR");
+  }
+
+  function formatDistance(steps) {
+    const km = steps * STEP_LENGTH_METERS / 1000;
+    return km.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }) + " km";
+  }
+
+  function sessionElapsed() {
+    if (!session) return 0;
+
+    const current = session.status === "running"
+      ? Date.now() - session.startedAt
+      : 0;
+
+    return (session.elapsedMs || 0) + current;
+  }
+
+  function formatTime(milliseconds) {
+    const total = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(total / 3600);
+    const minutes = Math.floor((total % 3600) / 60);
+    const seconds = total % 60;
+
+    return [
+      String(hours).padStart(2, "0"),
+      String(minutes).padStart(2, "0"),
+      String(seconds).padStart(2, "0")
+    ].join(":");
+  }
+
+  function updateUI() {
+    if (data.date !== localDate()) {
+      data.date = localDate();
+      data.steps = 0;
+      persist();
+    }
+
+    const percent = Math.min(
+      100,
+      Math.round(data.steps / data.goal * 100)
+    );
+
+    dailyNumber.textContent = formatNumber(data.steps);
+
+    if (dailyBar) dailyBar.style.width = percent + "%";
+    if (dailyGoal) {
+      dailyGoal.textContent =
+        "Meta: " + formatNumber(data.goal) + " passos";
+    }
+    if (dailyPercent) dailyPercent.textContent = percent + "%";
+
+    if (dailyDistance) {
+      dailyDistance.textContent = formatDistance(data.steps);
+    }
+
+    if (dailyCalories) {
+      dailyCalories.textContent =
+        Math.round(data.steps * KCAL_PER_STEP) + " kcal";
+    }
+
+    if (session) {
+      sessionNumber.textContent = formatNumber(session.steps || 0);
+      sessionDistance.textContent = formatDistance(session.steps || 0);
+      sessionTime.textContent = formatTime(sessionElapsed());
+    } else {
+      sessionNumber.textContent = "0";
+      sessionDistance.textContent = "0,00 km";
+      sessionTime.textContent = "00:00:00";
+    }
+
+    dailyButton.textContent = dailyActive
+      ? "Pausar contagem diária"
+      : "Ativar contagem diária";
+
+    sessionButton.textContent = session
+      ? session.status === "running"
+        ? "Pausar caminhada"
+        : "Continuar caminhada"
+      : "Iniciar caminhada";
+
+    finishButton.disabled = !session;
+    finishButton.style.opacity = session ? "1" : ".45";
+  }
+
+  function setStatus(message) {
+    dailyStatus.textContent = message;
+  }
+
+  function setSessionStatus(message) {
+    sessionStatus.textContent = message;
+  }
+
+  function createButton(label) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn-primary btn-small";
+    button.textContent = label;
+    button.style.margin = "5px 5px 5px 0";
+    button.style.cursor = "pointer";
+    return button;
+  }
+
+  // Cria os controles sem precisar alterar o HTML novamente.
+  const dailyButton = createButton("Ativar contagem diária");
+  dailyButton.style.width = "100%";
+  dailyStatus.insertAdjacentElement("afterend", dailyButton);
+
+  const sessionStatus = sessionCard.querySelector(".steps-status");
+  sessionStatus.id = "sessionStepsStatus";
+
+  const controls = document.createElement("div");
+  controls.className = "steps-controls";
+
+  const sessionButton = createButton("Iniciar caminhada");
+  const finishButton = createButton("Finalizar caminhada");
+
+  controls.append(sessionButton, finishButton);
+  sessionStatus.insertAdjacentElement("afterend", controls);
+
+  function registerStep() {
+    if (!dailyActive && (!session || session.status !== "running")) {
+      return;
+    }
+
+    data.steps += 1;
+
+    if (session && session.status === "running") {
+      session.steps = (session.steps || 0) + 1;
+    }
+
+    updateUI();
+    persist();
+  }
+
+  // Detecta picos de movimento no acelerômetro.
+  function handleMotion(event) {
+    const acceleration = event.acceleration;
+    const includesGravity = !acceleration ||
+      acceleration.x === null ||
+      acceleration.y === null ||
+      acceleration.z === null;
+
+    const source = includesGravity
+      ? event.accelerationIncludingGravity
+      : acceleration;
+
+    if (!source ||
+        source.x === null ||
+        source.y === null ||
+        source.z === null) {
+      return;
+    }
+
+    const x = Number(source.x) || 0;
+    const y = Number(source.y) || 0;
+    const z = Number(source.z) || 0;
+
+    let magnitude;
+
+    if (includesGravity) {
+      if (!gravity) {
+        gravity = { x, y, z };
+        return;
+      }
+
+      const alpha = 0.85;
+
+      gravity.x = alpha * gravity.x + (1 - alpha) * x;
+      gravity.y = alpha * gravity.y + (1 - alpha) * y;
+      gravity.z = alpha * gravity.z + (1 - alpha) * z;
+
+      const lx = x - gravity.x;
+      const ly = y - gravity.y;
+      const lz = z - gravity.z;
+
+      magnitude = Math.sqrt(lx * lx + ly * ly + lz * lz);
+    } else {
+      magnitude = Math.sqrt(x * x + y * y + z * z);
+    }
+
+    const now = Date.now();
+    const threshold = 1.15;
+
+    if (magnitude > threshold && !inPeak) {
+      inPeak = true;
+      peakValue = magnitude;
+      peakStartedAt = now;
+    }
+
+    if (inPeak) {
+      peakValue = Math.max(peakValue, magnitude);
+
+      const peakFinished =
+        magnitude < peakValue * 0.65 &&
+        now - peakStartedAt > 90;
+
+      const peakTimedOut = now - peakStartedAt > 700;
+
+      if (peakFinished || peakTimedOut) {
+        if (now - lastStepAt > 320) {
+          registerStep();
+          lastStepAt = now;
+        }
+
+        inPeak = false;
+      }
+    }
+  }
+
+  async function startSensor() {
+    if (!("DeviceMotionEvent" in window)) {
+      setStatus("Este navegador não disponibiliza o sensor de movimento.");
+      return false;
+    }
+
+    try {
+      if (typeof DeviceMotionEvent.requestPermission === "function") {
+        const permission = await DeviceMotionEvent.requestPermission();
+
+        if (permission !== "granted") {
+          setStatus("Permissão do sensor não concedida.");
+          return false;
+        }
+      }
+
+      if (!sensorAttached) {
+        window.addEventListener("devicemotion", handleMotion);
+        sensorAttached = true;
+      }
+
+      setStatus("Sensor ativo. Caminhe com o celular junto ao corpo.");
+      return true;
+    } catch (error) {
+      console.error("Erro ao ativar sensor:", error);
+      setStatus("Não foi possível ativar o sensor. Verifique as permissões.");
+      return false;
+    }
+  }
+
+  function stopSensorIfIdle() {
+    if (dailyActive || (session && session.status === "running")) {
+      return;
+    }
+
+    if (sensorAttached) {
+      window.removeEventListener("devicemotion", handleMotion);
+      sensorAttached = false;
+    }
+
+    gravity = null;
+    inPeak = false;
+  }
+
+  dailyButton.addEventListener("click", async () => {
+    if (dailyActive) {
+      dailyActive = false;
+      stopSensorIfIdle();
+      setStatus("Contagem diária pausada.");
+      updateUI();
+      return;
+    }
+
+    const started = await startSensor();
+
+    if (started) {
+      dailyActive = true;
+      setStatus("Contagem diária ativa. Mantenha esta página aberta.");
+      updateUI();
+    }
+  });
+
+  sessionButton.addEventListener("click", async () => {
+    if (session && session.status === "running") {
+      session.elapsedMs += Date.now() - session.startedAt;
+      session.startedAt = null;
+      session.status = "paused";
+
+      persist();
+      stopSensorIfIdle();
+      setSessionStatus("Caminhada pausada.");
+      updateUI();
+      return;
+    }
+
+    const started = await startSensor();
+
+    if (!started) return;
+
+    dailyActive = true;
+
+    if (!session) {
+      session = {
+        date: localDate(),
+        steps: 0,
+        elapsedMs: 0,
+        startedAt: Date.now(),
+        status: "running"
+      };
+    } else {
+      session.startedAt = Date.now();
+      session.status = "running";
+    }
+
+    setStatus("Contagem diária ativa durante a caminhada.");
+    setSessionStatus("Caminhada em andamento.");
+    persist();
+    updateUI();
+  });
+
+  finishButton.addEventListener("click", () => {
+    if (!session) return;
+
+    if (session.status === "running") {
+      session.elapsedMs += Date.now() - session.startedAt;
+    }
+
+    const finished = {
+      date: session.date,
+      steps: session.steps || 0,
+      durationMs: session.elapsedMs || 0,
+      distanceKm: (session.steps || 0) * STEP_LENGTH_METERS / 1000
+    };
+
+    data.sessions.push(finished);
+    session = null;
+
+    persist();
+    stopSensorIfIdle();
+
+    setSessionStatus(
+      "Caminhada finalizada: " +
+      formatNumber(finished.steps) +
+      " passos."
+    );
+
+    updateUI();
+  });
+
+  // Atualiza o relógio da sessão sem alterar a contagem.
+  window.setInterval(() => {
+    if (session && session.status === "running") {
+      updateUI();
+    }
+  }, 1000);
+
+  updateUI();
+  persist();
+
+  if (session && session.status === "paused") {
+    setSessionStatus("Caminhada pausada. Você pode continuar ou finalizar.");
+  } else {
+    setSessionStatus("Pronto para iniciar sua caminhada.");
+  }
+
+  setStatus("Contador pronto. Toque em Ativar contagem diária.");
+
+  console.log("VivaFit: módulo de passos carregado.");
+})();
+
