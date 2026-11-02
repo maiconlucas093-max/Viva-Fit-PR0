@@ -2025,6 +2025,80 @@ init();
   
   initializeGpsMaps();
   
+    // Atualiza a localização e o percurso nos dois mapas.
+  function updateGpsMaps(current, addRoutePoint) {
+    if (typeof L === "undefined" || !current) return;
+    
+    if (!session) return;
+    
+    if (!Array.isArray(session.gpsRoute)) {
+      session.gpsRoute = [];
+    }
+    
+    const currentPoint = [
+      current.latitude,
+      current.longitude
+    ];
+    
+    // Adiciona um ponto novo ao percurso quando autorizado.
+    if (addRoutePoint) {
+      session.gpsRoute.push({
+        latitude: current.latitude,
+        longitude: current.longitude
+      });
+    }
+    
+    // Recupera todos os pontos já registrados.
+    const routeCoordinates = session.gpsRoute.map(point => [
+      point.latitude,
+      point.longitude
+    ]);
+    
+    // Atualiza a linha do percurso no mapa da caminhada.
+    if (sessionGpsRoute) {
+      sessionGpsRoute.setLatLngs(routeCoordinates);
+    }
+    
+    // Atualiza a linha do percurso no mapa completo.
+    if (gpsPageRoute) {
+      gpsPageRoute.setLatLngs(routeCoordinates);
+    }
+    
+    // Cria ou atualiza o marcador no mapa compacto.
+    if (sessionLeafletMap) {
+      if (!sessionGpsMarker) {
+        sessionGpsMarker = L.circleMarker(currentPoint, {
+          radius: 8,
+          color: "#ffffff",
+          weight: 3,
+          fillColor: "#2196f3",
+          fillOpacity: 1
+        }).addTo(sessionLeafletMap);
+      } else {
+        sessionGpsMarker.setLatLng(currentPoint);
+      }
+      
+      sessionLeafletMap.setView(currentPoint, 17);
+    }
+    
+    // Cria ou atualiza o marcador no mapa completo.
+    if (gpsLeafletMap) {
+      if (!gpsPageMarker) {
+        gpsPageMarker = L.circleMarker(currentPoint, {
+          radius: 8,
+          color: "#ffffff",
+          weight: 3,
+          fillColor: "#2196f3",
+          fillOpacity: 1
+        }).addTo(gpsLeafletMap);
+      } else {
+        gpsPageMarker.setLatLng(currentPoint);
+      }
+      
+      gpsLeafletMap.setView(currentPoint, 17);
+    }
+  }
+  
   // Corrige o tamanho do mapa ao abrir a tela GPS.
   window.addEventListener("hashchange", () => {
     if (window.location.hash === "#gps") {
