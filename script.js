@@ -271,7 +271,7 @@ Para organizar seus acessórios, consulte a categoria de hidratação na loja Vi
     title: "Corda de pular: o que considerar antes de começar",
     category: "Cardio e condicionamento",
     description: "Conheça cuidados básicos, escolha do equipamento e formas de começar gradualmente.",
-    image: "/capa-blog-corda.jpg",
+    image: "capa-blog-corda.jpg",
     date: "2026-01-12",
     content: `Pular corda é uma atividade que pode integrar diferentes rotinas de condicionamento físico, mas não é adequada para todas as pessoas em qualquer circunstância.
 
