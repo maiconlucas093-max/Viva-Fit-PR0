@@ -133,6 +133,85 @@
       </div>
     </section>
 
+
+    <!-- CONTADOR DE PASSOS VIVAFIT -->
+    <section class="section-wrap steps-section" id="passos" aria-labelledby="stepsTitle">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">MOVIMENTO E SAÚDE</span>
+          <h2 id="stepsTitle">Seus passos, sua evolução</h2>
+          <p class="section-description">Acompanhe sua movimentação diária e suas caminhadas.</p>
+        </div>
+      </div>
+
+      <div class="steps-grid">
+        <article class="steps-card steps-daily">
+          <div class="steps-card-heading">
+            <span class="steps-icon">👟</span>
+            <span class="mini-label">CONTAGEM DIÁRIA</span>
+          </div>
+
+          <p class="steps-caption">Passos de hoje</p>
+          <strong class="steps-number" id="dailySteps">0</strong>
+
+          <div class="steps-progress">
+            <span id="dailyStepsBar"></span>
+          </div>
+
+          <div class="steps-progress-info">
+            <span id="dailyStepsGoal">Meta: 8.000 passos</span>
+            <strong id="dailyStepsPercent">0%</strong>
+          </div>
+
+          <div class="steps-metrics">
+            <div>
+              <small>Distância estimada</small>
+              <strong id="dailyStepsDistance">0,00 km</strong>
+            </div>
+            <div>
+              <small>Calorias estimadas</small>
+              <strong id="dailyStepsCalories">0 kcal</strong>
+            </div>
+          </div>
+
+          <p class="steps-status" id="dailyStepsStatus">
+            Contador ainda não ativado.
+          </p>
+        </article>
+
+        <article class="steps-card steps-session">
+          <div class="steps-card-heading">
+            <span class="steps-icon">🚶</span>
+            <span class="mini-label">SESSÃO DE CAMINHADA</span>
+          </div>
+
+          <h3>Suas caminhadas</h3>
+          <p>Inicie uma sessão para acompanhar passos, tempo e distância percorrida.</p>
+
+          <div class="session-preview">
+            <div>
+              <small>Passos da sessão</small>
+              <strong id="sessionSteps">0</strong>
+            </div>
+            <div>
+              <small>Tempo</small>
+              <strong id="sessionTime">00:00:00</strong>
+            </div>
+            <div>
+              <small>Distância</small>
+              <strong id="sessionDistance">0,00 km</strong>
+            </div>
+          </div>
+
+          <p class="steps-status">
+            Sessão ainda não iniciada.
+          </p>
+        </article>
+      </div>
+    </section>
+    <!-- FIM DO CONTADOR DE PASSOS -->
+
+
     <section class="section-wrap content-section report-section" id="relatorio" aria-labelledby="reportTitle">
       <div class="section-heading">
         <div><span class="eyebrow">SEUS NÚMEROS</span><h2 id="reportTitle">Relatório de treino</h2><p class="section-description">Calculado com as atividades que você marcou como concluídas.</p></div>
