@@ -2619,15 +2619,20 @@ init();
     
     stopGpsTracking();
 
-    const finished = {
+        const finished = {
       date: session.date,
       steps: session.steps || 0,
       durationMs: session.elapsedMs || 0,
-            distanceKm: (
+      
+      distanceKm: (
         session.gpsDistanceMeters > 0 ?
         session.gpsDistanceMeters :
         (session.steps || 0) * STEP_LENGTH_METERS
-      ) / 1000
+      ) / 1000,
+      
+      gpsRoute: Array.isArray(session.gpsRoute) ?
+        [...session.gpsRoute] :
+        []
     };
 
     data.sessions.push(finished);
