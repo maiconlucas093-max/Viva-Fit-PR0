@@ -2408,13 +2408,15 @@ init();
     dailyActive = true;
 
     if (!session) {
-      session = {
+            session = {
         date: localDate(),
         steps: 0,
+        gpsDistanceMeters: 0,
         elapsedMs: 0,
         startedAt: Date.now(),
         status: "running"
       };
+      
     } else {
       session.startedAt = Date.now();
       session.status = "running";
