@@ -445,15 +445,15 @@
     closeAccount();
   }
 
-  function start() {
+    function start() {
     createInterface();
-
+    
     setPrivateAccess(false);
-
+    
     supabase.auth.onAuthStateChange((event, session) => {
       currentSession = session;
-
-            if (event === "PASSWORD_RECOVERY") {
+      
+      if (event === "PASSWORD_RECOVERY") {
         setPrivateAccess(Boolean(session));
         document.documentElement.classList.remove("vf-auth-pending");
         showRecovery();
@@ -462,11 +462,12 @@
       
       setPrivateAccess(Boolean(session));
       document.documentElement.classList.remove("vf-auth-pending");
+    });
   }
-
+  
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", start);
   } else {
     start();
   }
-})();
+  })();
