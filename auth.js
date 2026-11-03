@@ -6,6 +6,22 @@
 
 (function () {
   "use strict";
+    // Mantém as áreas pessoais ocultas enquanto o login é verificado.
+  document.documentElement.classList.add("vf-auth-pending");
+  
+  const protectionStyle = document.createElement("style");
+  protectionStyle.textContent = `
+    html.vf-auth-pending .dashboard-section,
+    html.vf-auth-pending #passos,
+    html.vf-auth-pending #gps,
+    html.vf-auth-pending .report-section,
+    html.vf-auth-pending #treinos,
+    html.vf-auth-pending #metas,
+    html.vf-auth-pending #progresso {
+      display: none !important;
+    }
+  `;
+  document.head.appendChild(protectionStyle);
 
   const supabase = window.vivaFitSupabase;
 
@@ -437,13 +453,15 @@
     supabase.auth.onAuthStateChange((event, session) => {
       currentSession = session;
 
-      if (event === "PASSWORD_RECOVERY") {
+            if (event === "PASSWORD_RECOVERY") {
+        setPrivateAccess(Boolean(session));
+        document.documentElement.classList.remove("vf-auth-pending");
         showRecovery();
         return;
       }
-
+      
       setPrivateAccess(Boolean(session));
-    });
+      document.documentElement.classList.remove("vf-auth-pending");
   }
 
   if (document.readyState === "loading") {
