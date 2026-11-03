@@ -291,7 +291,7 @@ Na loja VivaFit, você pode consultar o acessório relacionado a este conteúdo.
     title: "Como conhecer os elásticos de resistência",
     category: "Equipamentos fitness",
     description: "Entenda para que servem os elásticos e o que observar na escolha de um acessório.",
-    image: "",
+    image: "elastico-resistencia-blog.jpg",
     date: "2026-01-13",
     content: `Elásticos de resistência são acessórios compactos usados em diferentes exercícios.
 
