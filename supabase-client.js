@@ -11,7 +11,7 @@
   // Copie a chave publishable do arquivo
   // supabase.js do projeto PROSPERA.
   const SUPABASE_PUBLISHABLE_KEY =
-    "COLE_AQUI_A_CHAVE_DO_PROSPERA";
+    "sb_publishable_Ba1XXaQ7tFaZg7ebr78rYg_uQas1i7D";
   
   if (!window.supabase || !window.supabase.createClient) {
     console.error(
