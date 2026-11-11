@@ -2149,7 +2149,7 @@ const walkingHistory = document.getElementById("walkingHistory");
   
   function initializeGpsMaps() {
     const sessionMapElement = document.getElementById("sessionMap");
-    const gpsMapElement = document.getElementById("gpsMap");
+    
     
     if (typeof L === "undefined") {
       console.warn("Leaflet não foi carregado.");
