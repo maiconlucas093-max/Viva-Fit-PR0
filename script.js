@@ -408,6 +408,150 @@ function initNavigation() {
   $("#footerYear").textContent = new Date().getFullYear();
 }
 
+/* ---------- Sincronização de atividades com a PROSPERA ---------- */
+
+let fitnessUserId = null;
+let fitnessSyncVersion = 0;
+
+async function saveFitnessActivity(item) {
+  if (!fitnessUserId || !window.vivaFitSupabase) return;
+
+  const record = {
+    user_id: fitnessUserId,
+    external_id: String(item.id),
+    activity_name: item.name,
+    duration_minutes: Number(item.minutes),
+    activity_date: item.date,
+    completed: Boolean(item.done),
+    completed_at: item.completedAt || null,
+    source_app: "Viva-Fit-PRO"
+  };
+
+  const { error } = await window.vivaFitSupabase
+    .from("fitness_activities")
+    .upsert(record, { onConflict: "user_id,external_id" });
+
+  if (error) {
+    console.error("Erro ao sincronizar atividade:", error);
+    showToast("Atividade salva no aparelho, mas não foi sincronizada.");
+  }
+}
+
+async function deleteFitnessActivity(activityId) {
+  if (!fitnessUserId || !window.vivaFitSupabase) return;
+
+  const { error } = await window.vivaFitSupabase
+    .from("fitness_activities")
+    .delete()
+    .eq("user_id", fitnessUserId)
+    .eq("external_id", String(activityId));
+
+  if (error) {
+    console.error("Erro ao excluir atividade na nuvem:", error);
+    showToast("Não foi possível excluir a atividade da nuvem.");
+  }
+}
+
+async function loadFitnessActivities(session) {
+  const version = ++fitnessSyncVersion;
+
+  if (!session) {
+    fitnessUserId = null;
+    return;
+  }
+
+  const userId = session.user.id;
+  fitnessUserId = userId;
+
+  const { data, error } = await window.vivaFitSupabase
+    .from("fitness_activities")
+    .select("*")
+    .eq("user_id", userId)
+    .order("activity_date", { ascending: false });
+
+  if (version !== fitnessSyncVersion) return;
+
+  if (error) {
+    console.error("Erro ao carregar atividades da nuvem:", error);
+    showToast("Não foi possível carregar as atividades da nuvem.");
+    return;
+  }
+
+  const cloudActivities = (data || []).map(item => ({
+    id: item.external_id,
+    name: item.activity_name,
+    minutes: item.duration_minutes,
+    date: item.activity_date,
+    done: item.completed,
+    completedAt: item.completed_at,
+    createdAt: item.created_at
+  }));
+
+  const cloudIds = new Set(cloudActivities.map(item => String(item.id)));
+
+  // Preserva atividades locais que ainda não existem na nuvem.
+  const localOnly = activities.filter(
+    item => !cloudIds.has(String(item.id))
+  );
+
+  if (localOnly.length) {
+    const records = localOnly.map(item => ({
+      user_id: userId,
+      external_id: String(item.id),
+      activity_name: item.name,
+      duration_minutes: Number(item.minutes),
+      activity_date: item.date,
+      completed: Boolean(item.done),
+      completed_at: item.completedAt || null,
+      source_app: "Viva-Fit-PRO"
+    }));
+
+    const { error: uploadError } = await window.vivaFitSupabase
+      .from("fitness_activities")
+      .upsert(records, { onConflict: "user_id,external_id" });
+
+    if (version !== fitnessSyncVersion) return;
+
+    if (uploadError) {
+      console.error("Erro ao enviar atividades locais:", uploadError);
+      showToast("Algumas atividades locais ainda não foram sincronizadas.");
+    }
+  }
+
+  if (version !== fitnessSyncVersion) return;
+
+  // A nuvem prevalece quando a atividade já existe nos dois lugares.
+  activities = [...cloudActivities, ...localOnly];
+
+  save(VF.keys.activities, activities);
+  renderAll();
+}
+
+async function initializeFitnessSync() {
+  const client = window.vivaFitSupabase;
+
+  if (!client) {
+    console.error("Cliente Supabase do VivaFit não encontrado.");
+    return;
+  }
+
+  client.auth.onAuthStateChange((_event, session) => {
+    // Executa fora do callback de autenticação.
+    setTimeout(() => {
+      loadFitnessActivities(session);
+    }, 0);
+  });
+
+  const { data, error } = await client.auth.getSession();
+
+  if (error) {
+    console.error("Erro ao verificar sessão:", error);
+    return;
+  }
+
+  await loadFitnessActivities(data.session);
+}
+
 /* ---------- Atividades ---------- */
 
 function todayActivities() {
