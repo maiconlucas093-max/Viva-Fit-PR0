@@ -2142,7 +2142,7 @@ const walkingHistory = document.getElementById("walkingHistory");
   
   
   let sessionGpsMarker = null;
-  let gpsPageMarker = null;
+  
   
   let sessionGpsRoute = null;
   let gpsPageRoute = null;
