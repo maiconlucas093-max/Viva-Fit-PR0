@@ -2766,8 +2766,149 @@ const walkingHistory = document.getElementById("walkingHistory");
       String(seconds).padStart(2, "0")
     ].join(":");
   }
+    function renderWalkingEvolution() {
+    const totalSessions = document.getElementById("walkingTotalSessions");
+    const totalDistance = document.getElementById("walkingTotalDistance");
+    const totalSteps = document.getElementById("walkingTotalSteps");
+    const totalTime = document.getElementById("walkingTotalTime");
+    const chart = document.getElementById("walkingEvolutionChart");
+    const history = document.getElementById("walkingEvolutionHistory");
+    
+    if (!totalSessions || !chart || !history) return;
+    
+    const sessions = Array.isArray(data.sessions) ? data.sessions : [];
+    
+    const distance = sessions.reduce(
+      (sum, item) => sum + Number(item.distanceKm || 0), 0
+    );
+    
+    const steps = sessions.reduce(
+      (sum, item) => sum + Number(item.steps || 0), 0
+    );
+    
+    const duration = sessions.reduce(
+      (sum, item) => sum + Number(item.durationMs || 0), 0
+    );
+    
+    totalSessions.textContent = formatNumber(sessions.length);
+    totalDistance.textContent = distance.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }) + " km";
+    
+    totalSteps.textContent = formatNumber(steps);
+    
+    const hours = Math.floor(duration / 3600000);
+    const minutes = Math.floor((duration % 3600000) / 60000);
+    totalTime.textContent = hours + "h " + minutes + "min";
+    
+    const monthly = new Map();
+    const current = new Date();
+    
+    for (let i = 5; i >= 0; i--) {
+      const monthDate = new Date(
+        current.getFullYear(),
+        current.getMonth() - i,
+        1
+      );
+      
+      const key = monthDate.getFullYear() + "-" +
+        String(monthDate.getMonth() + 1).padStart(2, "0");
+      
+      monthly.set(key, {
+        label: monthDate.toLocaleDateString("pt-BR", {
+          month: "short"
+        }),
+        distance: 0
+      });
+    }
+    
+    sessions.forEach(item => {
+      if (!item.date) return;
+      
+      const key = item.date.slice(0, 7);
+      
+      if (monthly.has(key)) {
+        monthly.get(key).distance += Number(item.distanceKm || 0);
+      }
+    });
+    
+    const months = Array.from(monthly.values());
+    const maxDistance = Math.max(
+      1,
+      ...months.map(item => item.distance)
+    );
+    
+    chart.replaceChildren();
+    
+    if (!sessions.length) {
+      chart.innerHTML = '<div class="empty-state">Conclua sua primeira caminhada para visualizar sua evolução.</div>';
+    } else {
+      const chartGrid = document.createElement("div");
+      chartGrid.className = "walking-month-chart";
+      
+      months.forEach(item => {
+        const column = document.createElement("div");
+        column.className = "walking-month-column";
+        
+        const value = document.createElement("span");
+        value.textContent = item.distance.toLocaleString("pt-BR", {
+          maximumFractionDigits: 2
+        }) + " km";
+        
+        const bar = document.createElement("div");
+        bar.className = "walking-month-bar";
+        
+        const fill = document.createElement("div");
+        fill.className = "walking-month-fill";
+        fill.style.height = (item.distance / maxDistance * 100) + "%";
+        
+        const label = document.createElement("small");
+        label.textContent = item.label;
+        
+        bar.appendChild(fill);
+        column.append(value, bar, label);
+        chartGrid.appendChild(column);
+      });
+      
+      chart.appendChild(chartGrid);
+    }
+    
+    history.replaceChildren();
+    
+    if (!sessions.length) {
+      history.innerHTML = '<div class="empty-state">Suas caminhadas aparecerão aqui quando forem concluídas.</div>';
+      return;
+    }
+    
+    [...sessions].reverse().forEach(item => {
+      const row = document.createElement("div");
+      row.className = "walking-evolution-row";
+      
+      const date = document.createElement("strong");
+      const parsedDate = item.date ?
+        new Date(item.date + "T12:00:00") : null;
+      
+      date.textContent = parsedDate && !Number.isNaN(parsedDate.getTime()) ?
+        parsedDate.toLocaleDateString("pt-BR") :
+        "Caminhada registrada";
+      
+      const details = document.createElement("span");
+      details.textContent =
+        formatNumber(item.steps || 0) + " passos · " +
+        Number(item.distanceKm || 0).toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }) + " km · " +
+        formatTime(item.durationMs || 0);
+      
+      row.append(date, details);
+      history.appendChild(row);
+    });
+  }
     function renderWalkingHistory() {
     if (!walkingHistory) return;
+    renderWalkingEvolution();
     
     walkingHistory.replaceChildren();
     
