@@ -309,13 +309,19 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px soli
     .topbar { height: 65px; padding: 0 10px; gap: 8px; }
   .menu-toggle {
     display: block;
-    order: 3;
+    order: 1;
     flex-shrink: 0;
     padding: 6px;
     color: var(--ink);
     cursor: pointer;
   }
-  .top-cta { margin-left: auto; }
+  .top-cta {
+  order: 2;
+  margin-left: auto;
+  font-size: .72rem;
+  padding: 8px 9px;
+  flex-shrink: 1;
+}
   .navigation { display: none; position: absolute; top: 64px; left: 0; right: 0; padding: 12px 14px 17px; background: white; border-bottom: 1px solid var(--line); box-shadow: 0 10px 20px #00000008; flex-direction: column; align-items: stretch; }
   .navigation.open { display: flex; }
   .nav-link { padding: 12px; font-size: .9rem; }
