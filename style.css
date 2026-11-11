@@ -772,10 +772,6 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: va
 }
 
 
-.gps-panel .btn {
-  margin-top: 5px;
-}
-
 .steps-session .text-link {
   display: inline-block;
   margin-top: 13px;
