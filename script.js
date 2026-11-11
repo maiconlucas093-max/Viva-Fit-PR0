@@ -2145,7 +2145,7 @@ const walkingHistory = document.getElementById("walkingHistory");
   
   
   let sessionGpsRoute = null;
-  let gpsPageRoute = null;
+  
   
   function initializeGpsMaps() {
     const sessionMapElement = document.getElementById("sessionMap");
