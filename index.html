@@ -425,7 +425,7 @@
       
       <div class="feature-hub-grid">
         <a class="feature-hub-card" href="#evolucao-semanal">Evolução semanal <span>Abrir</span></a>
-        <button class="feature-hub-card" type="button" disabled>Conquistas e medalhas <span>Em breve</span></button>
+        <a class="feature-hub-card" href="#conquistas">Conquistas e medalhas <span>Abrir</span></a>
         <button class="feature-hub-card" type="button" disabled>Calendário de treinos <span>Em breve</span></button>
         <button class="feature-hub-card" type="button" disabled>Evolução das caminhadas <span>Em breve</span></button>
         <button class="feature-hub-card" type="button" disabled>Hidratação <span>Em breve</span></button>
@@ -501,6 +501,55 @@
       </div>
     </section>
   </div>
+  
+  <div id="achievementsView" class="app-view" hidden>
+    <section class="section-wrap content-section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">CADA PASSO É UMA VITÓRIA</span>
+          <h2>Conquistas e medalhas</h2>
+          <p class="section-description">
+            Reconheça seu esforço e acompanhe cada conquista da sua jornada.
+          </p>
+        </div>
+      </div>
+
+      <a href="#funcoes" class="btn btn-secondary">
+        ← Voltar para funções
+      </a>
+
+      <div class="stats-grid achievement-stats">
+        <article class="stat-card">
+          <span>Medalhas conquistadas</span>
+          <strong id="achievementUnlockedCount">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span>Total de medalhas</span>
+          <strong id="achievementTotalCount">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span>Atividades concluídas</span>
+          <strong id="achievementActivityCount">0</strong>
+        </article>
+      </div>
+
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Sua coleção de medalhas</h3>
+            <p>
+              Complete atividades para desbloquear novas conquistas.
+            </p>
+          </div>
+        </div>
+
+        <div id="achievementsGrid" class="achievements-grid"></div>
+      </div>
+    </section>
+  </div>
+
   <div id="contentView" class="app-view">
 
     <section class="section-wrap content-section blog-section" id="blog">
