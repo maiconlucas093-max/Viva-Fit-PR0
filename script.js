@@ -1683,7 +1683,140 @@ function renderAchievements() {
   `).join("");
 }
 
+/* ---------- Calendário de treinos ---------- */
 
+let calendarCurrentDate = new Date();
+let calendarSelectedISO = todayISO();
+
+function calendarISO(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function renderCalendar() {
+  const grid = $("#calendarGrid");
+  if (!grid) return;
+  
+  const year = calendarCurrentDate.getFullYear();
+  const month = calendarCurrentDate.getMonth();
+  
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startOffset = (firstDay.getDay() + 6) % 7;
+  
+  const monthActivities = activities.filter(item => {
+    const date = parseLocalDate(item.date);
+    return date.getFullYear() === year && date.getMonth() === month;
+  });
+  
+  const activeDates = new Set(monthActivities.map(item => item.date));
+  const completedDates = new Set(
+    monthActivities.filter(item => item.done).map(item => item.date)
+  );
+  
+  setText("#calendarActiveDays", activeDates.size);
+  setText("#calendarActivityCount", monthActivities.length);
+  setText("#calendarCompletedCount", monthActivities.filter(item => item.done).length);
+  
+  setText("#calendarMonthLabel", calendarCurrentDate.toLocaleDateString("pt-BR", {
+    month: "long",
+    year: "numeric"
+  }));
+  
+  const cells = [];
+  
+  for (let i = 0; i < startOffset; i++) {
+    cells.push('<div class="calendar-day is-outside"></div>');
+  }
+  
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const date = new Date(year, month, day);
+    const iso = calendarISO(date);
+    const classes = ["calendar-day"];
+    
+    if (activeDates.has(iso)) classes.push("has-activity");
+    if (completedDates.has(iso)) classes.push("has-completed");
+    if (iso === calendarSelectedISO) classes.push("is-selected");
+    if (iso === todayISO()) classes.push("is-today");
+    
+    cells.push(`
+      <button type="button"
+        class="${classes.join(" ")}"
+        data-calendar-date="${iso}">
+        <span>${day}</span>
+      </button>
+    `);
+  }
+  
+  grid.innerHTML = cells.join("");
+  renderCalendarDay();
+}
+
+function renderCalendarDay() {
+  const title = $("#calendarSelectedDate");
+  const summary = $("#calendarSelectedSummary");
+  const container = $("#calendarDayActivities");
+  
+  if (!title || !summary || !container) return;
+  
+  const selectedDate = parseLocalDate(calendarSelectedISO);
+  const dayActivities = activities.filter(item => item.date === calendarSelectedISO);
+  const completed = dayActivities.filter(item => item.done).length;
+  
+  title.textContent = selectedDate.toLocaleDateString("pt-BR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+  
+  summary.textContent = dayActivities.length ?
+    `${dayActivities.length} atividade(s), ${completed} concluída(s)` :
+    "Nenhuma atividade registrada neste dia.";
+  
+  if (!dayActivities.length) {
+    container.innerHTML = '<div class="empty-state">Nenhuma atividade registrada nesta data.</div>';
+    return;
+  }
+  
+  container.innerHTML = dayActivities.map(item => `
+    <article class="calendar-activity-row">
+      <div>
+        <strong>${escapeHTML(item.name || "Atividade")}</strong>
+        <span>${Number(item.minutes || 0)} minutos</span>
+      </div>
+      <span>${item.done ? "✓ Concluída" : "Pendente"}</span>
+    </article>
+  `).join("");
+}
+
+function initCalendar() {
+  const previous = $("#calendarPrevMonth");
+  const next = $("#calendarNextMonth");
+  const grid = $("#calendarGrid");
+  
+  if (previous) {
+    previous.addEventListener("click", () => {
+      calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() - 1);
+      renderCalendar();
+    });
+  }
+  
+  if (next) {
+    next.addEventListener("click", () => {
+      calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() + 1);
+      renderCalendar();
+    });
+  }
+  
+  if (grid) {
+    grid.addEventListener("click", event => {
+      const button = event.target.closest("[data-calendar-date]");
+      if (!button) return;
+      
+      calendarSelectedISO = button.dataset.calendarDate;
+      renderCalendar();
+    });
+  }
+}
 
 /* ---------- Atualização geral ---------- */
 
@@ -1693,6 +1826,7 @@ function renderAll() {
   renderDashboard();
   renderWeeklyFeature();
   renderAchievements();
+  renderCalendar();
   renderGoals();
   renderWeights();
   renderRecentHistory();
@@ -1704,6 +1838,7 @@ function renderAll() {
 
 function init() {
   initNavigation();
+  initCalendar();
   renderAll();
 
   // Redesenha o gráfico quando a largura disponível muda.
