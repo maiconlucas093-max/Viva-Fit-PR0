@@ -1498,6 +1498,91 @@ $("#newsletterForm").addEventListener("submit", event => {
   showToast("Formulário demonstrativo: conecte um serviço de e-mail para receber inscrições.");
 });
 
+function renderWeeklyFeature() {
+  const today = parseLocalDate(todayISO());
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+
+  const days = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
+  const weekActivities = [];
+
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + i);
+
+    const iso = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+    const completed = activities.filter(item =>
+      item.done && item.date === iso
+    );
+
+    weekActivities.push({
+      label: days[i],
+      date: iso,
+      count: completed.length,
+      minutes: completed.reduce(
+        (sum, item) => sum + Number(item.minutes || 0),
+        0
+      )
+    });
+  }
+
+  const completedTotal = weekActivities.reduce(
+    (sum, day) => sum + day.count, 0
+  );
+
+  const activeDays = weekActivities.filter(
+    day => day.count > 0
+  ).length;
+
+  const totalMinutes = weekActivities.reduce(
+    (sum, day) => sum + day.minutes, 0
+  );
+
+  setText("#weeklyFeatureActiveDays", `${activeDays}/7`);
+  setText("#weeklyFeatureCompleted", completedTotal);
+  setText("#weeklyFeatureMinutes", `${totalMinutes} min`);
+  setText("#weeklyFeatureGoal", `${completedTotal} de ${settings.weekly} atividades`);
+
+  setWidth(
+    "#weeklyFeatureGoalBar",
+    percentage(completedTotal, settings.weekly)
+  );
+
+  const chart = $("#weeklyFeatureChart");
+  const empty = $("#weeklyFeatureEmpty");
+
+  if (!chart || !empty) return;
+
+  empty.hidden = completedTotal > 0;
+  chart.innerHTML = "";
+
+  if (completedTotal === 0) return;
+
+  const maxCount = Math.max(
+    1,
+    ...weekActivities.map(day => day.count)
+  );
+
+  chart.innerHTML = weekActivities.map(day => {
+    const height = day.count
+      ? Math.max(8, day.count / maxCount * 100)
+      : 0;
+
+    return `
+      <div class="weekly-feature-day">
+        <span class="weekly-feature-count">${day.count}</span>
+        <div class="weekly-feature-bar">
+          <span class="weekly-feature-bar-fill"
+            style="height: ${height}%"></span>
+        </div>
+        <span class="weekly-feature-label">${day.label}</span>
+      </div>
+    `;
+  }).join("");
+}
+
+
 /* ---------- Atualização geral ---------- */
 
 function renderAll() {
