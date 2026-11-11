@@ -424,7 +424,7 @@
       </div>
       
       <div class="feature-hub-grid">
-        <button class="feature-hub-card" type="button" disabled>Evolução semanal <span>Em breve</span></button>
+        <a class="feature-hub-card" href="#evolucao-semanal">Evolução semanal <span>Abrir</span></a>
         <button class="feature-hub-card" type="button" disabled>Conquistas e medalhas <span>Em breve</span></button>
         <button class="feature-hub-card" type="button" disabled>Calendário de treinos <span>Em breve</span></button>
         <button class="feature-hub-card" type="button" disabled>Evolução das caminhadas <span>Em breve</span></button>
@@ -437,7 +437,70 @@
       </div>
     </section>
   </div>
-  
+    <div id="weeklyEvolutionView" class="app-view" hidden>
+    <section class="section-wrap content-section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">SEU DESEMPENHO</span>
+          <h2>Evolução semanal</h2>
+          <p class="section-description">
+            Acompanhe suas atividades e seu progresso nesta semana.
+          </p>
+        </div>
+      </div>
+      
+      <a href="#funcoes" class="btn btn-secondary">
+        ← Voltar para funções
+      </a>
+      
+      <div class="stats-grid weekly-feature-stats">
+        <article class="stat-card">
+          <span>Dias ativos</span>
+          <strong id="weeklyFeatureActiveDays">0/7</strong>
+        </article>
+        
+        <article class="stat-card">
+          <span>Atividades concluídas</span>
+          <strong id="weeklyFeatureCompleted">0</strong>
+        </article>
+        
+        <article class="stat-card">
+          <span>Minutos de atividade</span>
+          <strong id="weeklyFeatureMinutes">0 min</strong>
+        </article>
+      </div>
+      
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Atividades por dia</h3>
+            <p>Veja como foi sua semana de segunda a domingo.</p>
+          </div>
+        </div>
+        
+        <div id="weeklyFeatureChart" class="weekly-feature-chart"></div>
+        
+        <div id="weeklyFeatureEmpty" class="empty-state" hidden>
+          Ainda não existem atividades concluídas nesta semana.
+        </div>
+      </div>
+      
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Sua meta semanal</h3>
+            <p>Progresso das atividades concluídas em relação à meta.</p>
+          </div>
+        </div>
+        
+        <strong id="weeklyFeatureGoal">0 de 5 atividades</strong>
+        
+        <div class="progress-track">
+          <span id="weeklyFeatureGoalBar" class="progress-fill green-fill"></span>
+        </div>
+      </div>
+    </section>
+  </div>
   <div id="contentView" class="app-view">
 
     <section class="section-wrap content-section blog-section" id="blog">
