@@ -778,10 +778,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: va
 }
 
 @media (max-width: 700px) {
-  .gps-panel {
-    padding: 14px;
-    border-radius: 16px;
-  }
+ 
   
   .gps-map-compact {
     height: 200px;
