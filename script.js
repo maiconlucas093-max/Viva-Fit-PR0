@@ -2139,7 +2139,7 @@ const walkingHistory = document.getElementById("walkingHistory");
   // =====================================
   
   let sessionLeafletMap = null;
-  let gpsLeafletMap = null;
+  
   
   let sessionGpsMarker = null;
   let gpsPageMarker = null;
