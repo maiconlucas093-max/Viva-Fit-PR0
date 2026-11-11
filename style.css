@@ -774,9 +774,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: va
 
 .gps-attribution {
   margin: 8px 0 18px;
-  color: var(--muted);
-  font-size: .7rem;
-}
+  
 
 .gps-panel .btn {
   margin-top: 5px;
