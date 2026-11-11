@@ -427,7 +427,7 @@
         <a class="feature-hub-card" href="#evolucao-semanal">Evolução semanal <span>Abrir</span></a>
         <a class="feature-hub-card" href="#conquistas">Conquistas e medalhas <span>Abrir</span></a>
         <a class="feature-hub-card" href="#calendario">Calendário de treinos <span>Abrir</span></a>
-        <button class="feature-hub-card" type="button" disabled>Evolução das caminhadas <span>Em breve</span></button>
+       <a class="feature-hub-card" href="#evolucao-caminhadas">Evolução das caminhadas <span>Abrir</span></a>
         <button class="feature-hub-card" type="button" disabled>Hidratação <span>Em breve</span></button>
         <button class="feature-hub-card" type="button" disabled>Evolução do peso <span>Em breve</span></button>
         <button class="feature-hub-card" type="button" disabled>Lembretes inteligentes <span>Em breve</span></button>
@@ -622,7 +622,71 @@
       </div>
     </section>
   </div>
+  <div id="walkingEvolutionView" class="app-view" hidden>
+    <section class="section-wrap content-section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">SEU DESEMPENHO</span>
+          <h2>Evolução das caminhadas</h2>
+          <p class="section-description">
+            Acompanhe suas distâncias, passos e tempo de caminhada.
+          </p>
+        </div>
+      </div>
 
+      <a href="#funcoes" class="btn btn-secondary">
+        ← Voltar para funções
+      </a>
+
+      <div class="stats-grid walking-evolution-stats">
+        <article class="stat-card">
+          <span>Caminhadas realizadas</span>
+          <strong id="walkingTotalSessions">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span>Distância total</span>
+          <strong id="walkingTotalDistance">0 km</strong>
+        </article>
+
+        <article class="stat-card">
+          <span>Total de passos</span>
+          <strong id="walkingTotalSteps">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span>Tempo caminhando</span>
+          <strong id="walkingTotalTime">0h 0min</strong>
+        </article>
+      </div>
+
+      <div class="panel walking-evolution-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Evolução por mês</h3>
+            <p>Distância percorrida em cada mês.</p>
+          </div>
+        </div>
+
+        <div id="walkingEvolutionChart"></div>
+      </div>
+
+      <div class="panel walking-evolution-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Histórico de caminhadas</h3>
+            <p>Confira suas caminhadas concluídas.</p>
+          </div>
+        </div>
+
+        <div id="walkingEvolutionHistory">
+          <div class="empty-state">
+            Suas caminhadas aparecerão aqui.
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
   <div id="contentView" class="app-view">
 
     <section class="section-wrap content-section blog-section" id="blog">
