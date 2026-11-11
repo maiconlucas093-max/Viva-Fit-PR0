@@ -771,10 +771,6 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: va
   margin-top: 20px;
 }
 
-.gps-map-full {
-  height: 430px;
-  min-height: 300px;
-}
 
 .gps-attribution {
   margin: 8px 0 18px;
