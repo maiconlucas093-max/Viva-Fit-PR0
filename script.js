@@ -1836,6 +1836,159 @@ function initCalendar() {
 /* ---------- Atualização geral ---------- */
 
 
+/* ---------- Controle de hidratação ---------- */
+
+const HYDRATION_KEY = "vivafit_hydration_v1";
+
+function getHydrationData() {
+  const data = load(HYDRATION_KEY, {
+    goal: 2000,
+    days: {}
+  });
+
+  if (!data.days || typeof data.days !== "object") {
+    data.days = {};
+  }
+
+  if (!Number.isFinite(Number(data.goal))) {
+    data.goal = 2000;
+  }
+
+  return data;
+}
+
+function renderHydration() {
+  const data = getHydrationData();
+  const today = todayISO();
+
+  if (!Array.isArray(data.days[today])) {
+    data.days[today] = [];
+  }
+
+  const records = data.days[today];
+  const consumed = records.reduce(
+    (total, item) => total + Number(item.amount || 0),
+    0
+  );
+
+  const goal = Number(data.goal) || 2000;
+  const percentage = Math.round((consumed / goal) * 100);
+  const progress = Math.min(100, percentage);
+
+  setText("#hydrationConsumed", `${consumed.toLocaleString("pt-BR")} ml`);
+  setText("#hydrationGoalDisplay", `${goal.toLocaleString("pt-BR")} ml`);
+  setText("#hydrationPercentage", `${percentage}%`);
+  setText("#hydrationGoalInput", goal);
+
+  const bar = $("#hydrationProgressBar");
+  if (bar) {
+    bar.style.width = `${progress}%`;
+  }
+
+  const message = $("#hydrationProgressMessage");
+  if (message) {
+    if (consumed === 0) {
+      message.textContent = "Registre sua primeira ingestão de água.";
+    } else if (consumed >= goal) {
+      message.textContent = "Parabéns! Você atingiu sua meta diária.";
+    } else {
+      const remaining = goal - consumed;
+      message.textContent =
+        `Faltam ${remaining.toLocaleString("pt-BR")} ml para atingir sua meta.`;
+    }
+  }
+
+  const history = $("#hydrationHistory");
+  if (history) {
+    if (records.length === 0) {
+      history.innerHTML =
+        '<div class="empty-state">Nenhum consumo registrado hoje.</div>';
+    } else {
+      history.innerHTML = [...records]
+        .reverse()
+        .map(item => `
+          <div class="hydration-history-row">
+            <strong>${Number(item.amount).toLocaleString("pt-BR")} ml</strong>
+            <span>${escapeHTML(item.time || "")}</span>
+          </div>
+        `)
+        .join("");
+    }
+  }
+
+  save(HYDRATION_KEY, data);
+}
+
+function addHydration(amount) {
+  const quantity = Number(amount);
+
+  if (!Number.isFinite(quantity) || quantity <= 0 || quantity > 5000) {
+    showToast("Informe uma quantidade válida de água.");
+    return;
+  }
+
+  const data = getHydrationData();
+  const today = todayISO();
+
+  if (!Array.isArray(data.days[today])) {
+    data.days[today] = [];
+  }
+
+  data.days[today].push({
+    amount: Math.round(quantity),
+    time: new Date().toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit"
+    })
+  });
+
+  if (save(HYDRATION_KEY, data)) {
+    renderHydration();
+    showToast("Consumo de água registrado!");
+  }
+}
+
+function initHydration() {
+  const customInput = $("#hydrationCustomAmount");
+  const customButton = $("#hydrationAddCustom");
+  const goalInput = $("#hydrationGoalInput");
+  const saveGoalButton = $("#hydrationSaveGoal");
+
+  $$("[data-water]").forEach(button => {
+    button.addEventListener("click", () => {
+      addHydration(button.dataset.water);
+    });
+  });
+
+  if (customButton && customInput) {
+    customButton.addEventListener("click", () => {
+      addHydration(customInput.value);
+      customInput.value = "";
+    });
+  }
+
+  if (goalInput && saveGoalButton) {
+    saveGoalButton.addEventListener("click", () => {
+      const goal = Number(goalInput.value);
+
+      if (!Number.isFinite(goal) || goal < 250 || goal > 10000) {
+        showToast("A meta deve ficar entre 250 e 10.000 ml.");
+        return;
+      }
+
+      const data = getHydrationData();
+      data.goal = Math.round(goal);
+
+      if (save(HYDRATION_KEY, data)) {
+        renderHydration();
+        showToast("Meta diária atualizada!");
+      }
+    });
+  }
+
+  renderHydration();
+}
+
 function renderAll() {
   renderActivities();
   renderDashboard();
@@ -1854,6 +2007,7 @@ function renderAll() {
 function init() {
   initNavigation();
   initCalendar();
+  initHydration();
   renderAll();
 
   // Redesenha o gráfico quando a largura disponível muda.
