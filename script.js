@@ -2501,19 +2501,26 @@ const walkingHistory = document.getElementById("walkingHistory");
       const completedActivities = activities.filter(item => item.done);
       const completedIds = completedActivities.map(item => String(item.id));
       
-      // Exige autenticação para evitar que dados da nuvem reapareçam depois.
-      if (
-        completedIds.length &&
-        window.vivaFitSupabase &&
-        !fitnessUserId
-      ) {
-        showToast("Entre na sua conta para apagar também o histórico da nuvem.");
-        return;
+      // Confere diretamente a sessão atual da conta.
+      const supabaseClient = window.vivaFitSupabase;
+      
+      if (completedIds.length && supabaseClient) {
+        const { data: authData, error: authError } =
+        await supabaseClient.auth.getSession();
+        
+        const currentUserId = authData?.session?.user?.id;
+        
+        if (authError || !currentUserId) {
+          showToast("Não foi possível confirmar sua conta. Entre novamente e tente.");
+          return;
+        }
+        
+        fitnessUserId = currentUserId;
       }
       
       // Exclui primeiro da nuvem, quando houver atividades concluídas.
-      if (completedIds.length && fitnessUserId && window.vivaFitSupabase) {
-        const { error } = await window.vivaFitSupabase
+      if (completedIds.length && fitnessUserId && supabaseClient) {
+        const { error } = await supabaseClient
           .from("fitness_activities")
           .delete()
           .eq("user_id", fitnessUserId)
