@@ -361,20 +361,26 @@ function initNavigation() {
   const toggle = $("#menuToggle");
   const nav = $("#navigation");
   
-      const homeView = document.getElementById("homeView");
+      
+  const homeView = document.getElementById("homeView");
   const contentView = document.getElementById("contentView");
   const featuresHubView = document.getElementById("featuresHubView");
   const weeklyEvolutionView = document.getElementById("weeklyEvolutionView");
-  
+  const achievementsView = document.getElementById("achievementsView");
+
   function updateAppViews(hash = window.location.hash) {
     const showContent = hash === "#blog" || hash === "#loja";
     const showFeatures = hash === "#funcoes";
     const showWeeklyEvolution = hash === "#evolucao-semanal";
-    
-    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution;
+    const showAchievements = hash === "#conquistas";
+
+    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements;
     if (contentView) contentView.hidden = !showContent;
     if (featuresHubView) featuresHubView.hidden = !showFeatures;
     if (weeklyEvolutionView) weeklyEvolutionView.hidden = !showWeeklyEvolution;
+    if (achievementsView) achievementsView.hidden = !showAchievements;
+  }
+
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(link => {
