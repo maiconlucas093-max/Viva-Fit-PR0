@@ -1588,6 +1588,7 @@ function renderWeeklyFeature() {
 function renderAll() {
   renderActivities();
   renderDashboard();
+    renderWeeklyFeature();
   renderGoals();
   renderWeights();
   renderRecentHistory();
