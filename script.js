@@ -362,7 +362,29 @@ function initNavigation() {
   const nav = $("#navigation");
   
       
+  
   const homeView = document.getElementById("homeView");
+  const contentView = document.getElementById("contentView");
+  const featuresHubView = document.getElementById("featuresHubView");
+  const weeklyEvolutionView = document.getElementById("weeklyEvolutionView");
+  const achievementsView = document.getElementById("achievementsView");
+  const calendarView = document.getElementById("calendarView");
+
+  function updateAppViews(hash = window.location.hash) {
+    const showContent = hash === "#blog" || hash === "#loja";
+    const showFeatures = hash === "#funcoes";
+    const showWeeklyEvolution = hash === "#evolucao-semanal";
+    const showAchievements = hash === "#conquistas";
+    const showCalendar = hash === "#calendario";
+
+    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar;
+    if (contentView) contentView.hidden = !showContent;
+    if (featuresHubView) featuresHubView.hidden = !showFeatures;
+    if (weeklyEvolutionView) weeklyEvolutionView.hidden = !showWeeklyEvolution;
+    if (achievementsView) achievementsView.hidden = !showAchievements;
+    if (calendarView) calendarView.hidden = !showCalendar;
+  }
+
   const contentView = document.getElementById("contentView");
   const featuresHubView = document.getElementById("featuresHubView");
   const weeklyEvolutionView = document.getElementById("weeklyEvolutionView");
