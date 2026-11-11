@@ -426,7 +426,7 @@
       <div class="feature-hub-grid">
         <a class="feature-hub-card" href="#evolucao-semanal">Evolução semanal <span>Abrir</span></a>
         <a class="feature-hub-card" href="#conquistas">Conquistas e medalhas <span>Abrir</span></a>
-        <button class="feature-hub-card" type="button" disabled>Calendário de treinos <span>Em breve</span></button>
+        <a class="feature-hub-card" href="#calendario">Calendário de treinos <span>Abrir</span></a>
         <button class="feature-hub-card" type="button" disabled>Evolução das caminhadas <span>Em breve</span></button>
         <button class="feature-hub-card" type="button" disabled>Hidratação <span>Em breve</span></button>
         <button class="feature-hub-card" type="button" disabled>Evolução do peso <span>Em breve</span></button>
@@ -546,6 +546,79 @@
         </div>
 
         <div id="achievementsGrid" class="achievements-grid"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="calendarView" class="app-view" hidden>
+    <section class="section-wrap content-section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">SUA ROTINA EM MOVIMENTO</span>
+          <h2>Calendário de treinos</h2>
+          <p class="section-description">
+            Acompanhe suas atividades e visualize sua consistência ao longo dos meses.
+          </p>
+        </div>
+      </div>
+
+      <a href="#funcoes" class="btn btn-secondary">
+        ← Voltar para funções
+      </a>
+
+      <div class="stats-grid calendar-stats">
+        <article class="stat-card">
+          <span>Dias com atividades</span>
+          <strong id="calendarActiveDays">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span>Atividades no mês</span>
+          <strong id="calendarActivityCount">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span>Concluídas</span>
+          <strong id="calendarCompletedCount">0</strong>
+        </article>
+      </div>
+
+      <div class="panel calendar-panel">
+        <div class="calendar-heading">
+          <button type="button" id="calendarPrevMonth" class="btn btn-secondary" aria-label="Mês anterior">←</button>
+          <h3 id="calendarMonthLabel">Mês e ano</h3>
+          <button type="button" id="calendarNextMonth" class="btn btn-secondary" aria-label="Próximo mês">→</button>
+        </div>
+
+        <div class="calendar-weekdays">
+          <span>Seg</span>
+          <span>Ter</span>
+          <span>Qua</span>
+          <span>Qui</span>
+          <span>Sex</span>
+          <span>Sáb</span>
+          <span>Dom</span>
+        </div>
+
+        <div id="calendarGrid" class="calendar-grid"></div>
+
+        <div class="calendar-legend">
+          <span><i class="calendar-dot"></i> Com atividade</span>
+          <span><i class="calendar-dot completed"></i> Atividade concluída</span>
+        </div>
+      </div>
+
+      <div class="panel calendar-day-panel">
+        <div class="panel-heading">
+          <div>
+            <h3 id="calendarSelectedDate">Atividades do dia</h3>
+            <p id="calendarSelectedSummary">Selecione uma data no calendário.</p>
+          </div>
+        </div>
+
+        <div id="calendarDayActivities">
+          <div class="empty-state">Selecione um dia para visualizar suas atividades.</div>
+        </div>
       </div>
     </section>
   </div>
