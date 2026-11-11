@@ -2189,7 +2189,7 @@ const walkingHistory = document.getElementById("walkingHistory");
   
   initializeGpsMaps();
   
-    // Atualiza a localização e o percurso nos dois mapas.
+// Atualiza a localização e o percurso no mapa compacto.
   function updateGpsMaps(current, addRoutePoint) {
     if (typeof L === "undefined" || !current) return;
     
