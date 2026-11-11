@@ -946,3 +946,103 @@ a.feature-hub-card {
     height: 95px;
   }
 }
+
+/* =====================================
+   CONQUISTAS E MEDALHAS
+   ===================================== */
+
+.achievement-stats {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.achievement-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  transition: transform .2s ease, border-color .2s ease;
+}
+
+.achievement-card.is-unlocked {
+  border-color: var(--primary);
+}
+
+.achievement-card.is-locked {
+  opacity: .65;
+}
+
+.achievement-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: var(--line);
+  font-size: 1.8rem;
+}
+
+.achievement-card.is-unlocked .achievement-icon {
+  background: rgba(185, 243, 107, .16);
+}
+
+.achievement-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievement-info h3 {
+  margin: 0 0 5px;
+  font-size: .95rem;
+}
+
+.achievement-info p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: .8rem;
+  line-height: 1.4;
+}
+
+.achievement-info small {
+  color: var(--muted);
+  font-size: .72rem;
+}
+
+.achievement-status {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.achievement-card.is-unlocked .achievement-status {
+  color: var(--primary);
+}
+
+@media (max-width: 600px) {
+  .achievements-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .achievement-card {
+    padding: 14px;
+  }
+
+  .achievement-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.6rem;
+  }
+}
