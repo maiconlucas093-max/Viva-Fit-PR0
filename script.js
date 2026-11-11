@@ -2242,22 +2242,7 @@ const walkingHistory = document.getElementById("walkingHistory");
       sessionLeafletMap.setView(currentPoint, 17);
     }
     
-    // Cria ou atualiza o marcador no mapa completo.
-    if (gpsLeafletMap) {
-      if (!gpsPageMarker) {
-        gpsPageMarker = L.circleMarker(currentPoint, {
-          radius: 8,
-          color: "#ffffff",
-          weight: 3,
-          fillColor: "#2196f3",
-          fillOpacity: 1
-        }).addTo(gpsLeafletMap);
-      } else {
-        gpsPageMarker.setLatLng(currentPoint);
-      }
-      
-      gpsLeafletMap.setView(currentPoint, 17);
-    }
+    
   }
   
   // Corrige o tamanho do mapa ao abrir a tela GPS.
