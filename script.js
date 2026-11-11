@@ -1815,12 +1815,7 @@ function initCalendar() {
     });
   }
   
-  if (next) {
-    next.addEventListener("click", () => {
-      calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() + 1);
-      renderCalendar();
-    });
-  }
+  
   
   if (grid) {
     grid.addEventListener("click", event => {
