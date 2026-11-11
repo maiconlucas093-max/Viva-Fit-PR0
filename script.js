@@ -363,12 +363,13 @@ function initNavigation() {
   
       
   
-    const homeView = document.getElementById("homeView");
+      const homeView = document.getElementById("homeView");
   const contentView = document.getElementById("contentView");
   const featuresHubView = document.getElementById("featuresHubView");
   const weeklyEvolutionView = document.getElementById("weeklyEvolutionView");
   const achievementsView = document.getElementById("achievementsView");
   const calendarView = document.getElementById("calendarView");
+  const walkingEvolutionView = document.getElementById("walkingEvolutionView");
   
   function updateAppViews(hash = window.location.hash) {
     const showContent = hash === "#blog" || hash === "#loja";
@@ -376,13 +377,15 @@ function initNavigation() {
     const showWeeklyEvolution = hash === "#evolucao-semanal";
     const showAchievements = hash === "#conquistas";
     const showCalendar = hash === "#calendario";
+    const showWalkingEvolution = hash === "#evolucao-caminhadas";
     
-    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar;
+    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution;
     if (contentView) contentView.hidden = !showContent;
     if (featuresHubView) featuresHubView.hidden = !showFeatures;
     if (weeklyEvolutionView) weeklyEvolutionView.hidden = !showWeeklyEvolution;
     if (achievementsView) achievementsView.hidden = !showAchievements;
     if (calendarView) calendarView.hidden = !showCalendar;
+    if (walkingEvolutionView) walkingEvolutionView.hidden = !showWalkingEvolution;
   }
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener("click", () => {
