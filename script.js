@@ -1588,6 +1588,101 @@ function renderWeeklyFeature() {
   }).join("");
 }
 
+function renderAchievements() {
+  const completed = activities.filter(item => item.done);
+  const activeDays = getActiveDays();
+  const streak = calculateStreak();
+
+  const medals = [
+    {
+      icon: "🌱",
+      name: "Primeiro passo",
+      description: "Conclua sua primeira atividade.",
+      unlocked: completed.length >= 1,
+      progress: completed.length,
+      target: 1
+    },
+    {
+      icon: "🥉",
+      name: "Ritmo crescente",
+      description: "Conclua 5 atividades.",
+      unlocked: completed.length >= 5,
+      progress: completed.length,
+      target: 5
+    },
+    {
+      icon: "🥈",
+      name: "Determinação",
+      description: "Conclua 10 atividades.",
+      unlocked: completed.length >= 10,
+      progress: completed.length,
+      target: 10
+    },
+    {
+      icon: "🥇",
+      name: "Foco total",
+      description: "Conclua 25 atividades.",
+      unlocked: completed.length >= 25,
+      progress: completed.length,
+      target: 25
+    },
+    {
+      icon: "🏆",
+      name: "Lenda VivaFit",
+      description: "Conclua 50 atividades.",
+      unlocked: completed.length >= 50,
+      progress: completed.length,
+      target: 50
+    },
+    {
+      icon: "🔥",
+      name: "Em sequência",
+      description: "Mantenha 3 dias seguidos de atividade.",
+      unlocked: streak >= 3,
+      progress: streak,
+      target: 3
+    },
+    {
+      icon: "⚡",
+      name: "Semana poderosa",
+      description: "Mantenha 7 dias seguidos de atividade.",
+      unlocked: streak >= 7,
+      progress: streak,
+      target: 7
+    },
+    {
+      icon: "📅",
+      name: "Sempre presente",
+      description: "Atinja 7 dias diferentes de atividade.",
+      unlocked: activeDays.length >= 7,
+      progress: activeDays.length,
+      target: 7
+    }
+  ];
+
+  const unlocked = medals.filter(medal => medal.unlocked).length;
+
+  setText("#achievementUnlockedCount", unlocked);
+  setText("#achievementTotalCount", medals.length);
+  setText("#achievementActivityCount", completed.length);
+
+  const grid = $("#achievementsGrid");
+  if (!grid) return;
+
+  grid.innerHTML = medals.map(medal => `
+    <article class="achievement-card ${medal.unlocked ? "is-unlocked" : "is-locked"}">
+      <div class="achievement-icon">${medal.icon}</div>
+      <div class="achievement-info">
+        <h3>${medal.name}</h3>
+        <p>${medal.description}</p>
+        <small>${medal.unlocked ? "Conquistada" : `${Math.min(medal.progress, medal.target)} de ${medal.target}`}</small>
+      </div>
+      <span class="achievement-status">${medal.unlocked ? "✓" : "🔒"}</span>
+    </article>
+  `).join("");
+}
+
+
 
 /* ---------- Atualização geral ---------- */
 
