@@ -784,10 +784,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: va
     height: 200px;
   }
   
-  .gps-map-full {
-    height: 360px;
-    min-height: 280px;
-  }
+ 
 }
 
 /* FIM DOS MAPAS GPS */
