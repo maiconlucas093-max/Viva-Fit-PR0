@@ -756,35 +756,6 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: va
    VIVAFIT PRO — MAPAS GPS
    ===================================== */
 
-.gps-section {
-  scroll-margin-top: 90px;
-}
-
-.gps-panel {
-  padding: 22px;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: var(--card);
-}
-
-.gps-panel-heading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
-}
-
-.gps-panel-heading strong {
-  display: block;
-  color: var(--ink);
-  font-size: 1rem;
-}
-
-.gps-panel-heading p {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: .82rem;
-}
 
 .gps-map {
   width: 100%;
