@@ -1686,10 +1686,12 @@ function renderAchievements() {
 
 /* ---------- Atualização geral ---------- */
 
+
 function renderAll() {
   renderActivities();
   renderDashboard();
-    renderWeeklyFeature();
+  renderWeeklyFeature();
+  renderAchievements();
   renderGoals();
   renderWeights();
   renderRecentHistory();
@@ -1697,6 +1699,7 @@ function renderAll() {
   renderShop();
   renderCart();
 }
+
 
 function init() {
   initNavigation();
