@@ -2223,10 +2223,7 @@ const walkingHistory = document.getElementById("walkingHistory");
       sessionGpsRoute.setLatLngs(routeCoordinates);
     }
     
-    // Atualiza a linha do percurso no mapa completo.
-    if (gpsPageRoute) {
-      gpsPageRoute.setLatLngs(routeCoordinates);
-    }
+
     
     // Cria ou atualiza o marcador no mapa compacto.
     if (sessionLeafletMap) {
