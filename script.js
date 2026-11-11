@@ -361,14 +361,17 @@ function initNavigation() {
   const toggle = $("#menuToggle");
   const nav = $("#navigation");
   
-  const homeView = document.getElementById("homeView");
+    const homeView = document.getElementById("homeView");
   const contentView = document.getElementById("contentView");
-
+  const featuresHubView = document.getElementById("featuresHubView");
+  
   function updateAppViews(hash = window.location.hash) {
     const showContent = hash === "#blog" || hash === "#loja";
-
-    if (homeView) homeView.hidden = showContent;
+    const showFeatures = hash === "#funcoes";
+    
+    if (homeView) homeView.hidden = showContent || showFeatures;
     if (contentView) contentView.hidden = !showContent;
+    if (featuresHubView) featuresHubView.hidden = !showFeatures;
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(link => {
