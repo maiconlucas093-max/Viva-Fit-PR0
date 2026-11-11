@@ -825,3 +825,124 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: va
 
 /* FIM DOS MAPAS GPS */
 
+
+/* =====================================
+   CENTRAL DE FUNÇÕES E EVOLUÇÃO SEMANAL
+   ===================================== */
+
+.feature-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.feature-hub-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 68px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface, #fff);
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+}
+
+a.feature-hub-card {
+  cursor: pointer;
+}
+
+.feature-hub-card span {
+  flex-shrink: 0;
+  font-size: .75rem;
+  color: var(--muted, #777);
+  font-weight: 500;
+}
+
+.feature-hub-card:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+.weekly-feature-stats {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.weekly-feature-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 12px;
+  min-height: 190px;
+  padding: 20px 8px 8px;
+}
+
+.weekly-feature-day {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+  height: 160px;
+}
+
+.weekly-feature-count,
+.weekly-feature-label {
+  font-size: .8rem;
+  color: var(--muted, #777);
+}
+
+.weekly-feature-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  max-width: 38px;
+  height: 110px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--line, #e5e5e5);
+}
+
+.weekly-feature-bar-fill {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  border-radius: 8px;
+  background: var(--primary, #36a269);
+  transition: height .3s ease;
+}
+
+@media (max-width: 600px) {
+  .feature-hub-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .feature-hub-card {
+    min-height: 58px;
+  }
+
+  .weekly-feature-chart {
+    gap: 6px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .weekly-feature-day {
+    height: 145px;
+  }
+
+  .weekly-feature-bar {
+    height: 95px;
+  }
+}
