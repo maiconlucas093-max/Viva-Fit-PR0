@@ -1218,3 +1218,129 @@ a.feature-hub-card {
     gap: 6px;
   }
 }
+
+/* =====================================
+   EVOLUÇÃO DAS CAMINHADAS
+   ===================================== */
+
+.walking-evolution-stats {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.walking-evolution-panel {
+  margin-top: 20px;
+}
+
+.walking-evolution-chart {
+  min-height: 220px;
+  padding: 18px 8px;
+}
+
+.walking-month-chart {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+  min-height: 200px;
+}
+
+.walking-month-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  min-width: 0;
+  height: 190px;
+}
+
+.walking-month-column > span {
+  color: var(--muted);
+  font-size: .72rem;
+  text-align: center;
+}
+
+.walking-month-column small {
+  color: var(--muted);
+  font-size: .75rem;
+  text-transform: capitalize;
+}
+
+.walking-month-bar {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 42px;
+  height: 125px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: var(--line);
+}
+
+.walking-month-fill {
+  width: 100%;
+  min-height: 0;
+  border-radius: 9px;
+  background: var(--primary, #b9f36b);
+  transition: height .3s ease;
+}
+
+.walking-evolution-history {
+  display: grid;
+  gap: 10px;
+}
+
+.walking-evolution-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .03);
+}
+
+.walking-evolution-row strong {
+  font-size: .85rem;
+}
+
+.walking-evolution-row span {
+  color: var(--muted);
+  font-size: .78rem;
+  text-align: right;
+}
+
+@media (max-width: 600px) {
+  .walking-month-chart {
+    gap: 5px;
+  }
+
+  .walking-month-column {
+    height: 170px;
+    gap: 7px;
+  }
+
+  .walking-month-column > span {
+    font-size: .62rem;
+  }
+
+  .walking-month-column small {
+    font-size: .68rem;
+  }
+
+  .walking-month-bar {
+    height: 105px;
+  }
+
+  .walking-evolution-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .walking-evolution-row span {
+    text-align: left;
+  }
+}
