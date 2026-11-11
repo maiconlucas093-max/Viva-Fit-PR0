@@ -361,17 +361,20 @@ function initNavigation() {
   const toggle = $("#menuToggle");
   const nav = $("#navigation");
   
-    const homeView = document.getElementById("homeView");
+      const homeView = document.getElementById("homeView");
   const contentView = document.getElementById("contentView");
   const featuresHubView = document.getElementById("featuresHubView");
+  const weeklyEvolutionView = document.getElementById("weeklyEvolutionView");
   
   function updateAppViews(hash = window.location.hash) {
     const showContent = hash === "#blog" || hash === "#loja";
     const showFeatures = hash === "#funcoes";
+    const showWeeklyEvolution = hash === "#evolucao-semanal";
     
-    if (homeView) homeView.hidden = showContent || showFeatures;
+    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution;
     if (contentView) contentView.hidden = !showContent;
     if (featuresHubView) featuresHubView.hidden = !showFeatures;
+    if (weeklyEvolutionView) weeklyEvolutionView.hidden = !showWeeklyEvolution;
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(link => {
