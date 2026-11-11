@@ -381,7 +381,7 @@ function initNavigation() {
     if (achievementsView) achievementsView.hidden = !showAchievements;
   }
 
-  }
+  
 
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener("click", () => {
