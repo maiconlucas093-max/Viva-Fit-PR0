@@ -2487,6 +2487,58 @@ const walkingHistory = document.getElementById("walkingHistory");
       walkingHistory.appendChild(row);
     });
   }
+    // Botão para limpar somente os históricos concluídos.
+  const resetHistoryButton = document.getElementById("resetHistoryButton");
+  
+  if (resetHistoryButton) {
+    resetHistoryButton.addEventListener("click", async () => {
+      const confirmed = confirm(
+        "Deseja apagar as atividades concluídas e o histórico de caminhadas? Os passos de hoje e uma caminhada em andamento serão preservados."
+      );
+      
+      if (!confirmed) return;
+      
+      const completedActivities = activities.filter(item => item.done);
+      const completedIds = completedActivities.map(item => String(item.id));
+      
+      // Exige autenticação para evitar que dados da nuvem reapareçam depois.
+      if (
+        completedIds.length &&
+        window.vivaFitSupabase &&
+        !fitnessUserId
+      ) {
+        showToast("Entre na sua conta para apagar também o histórico da nuvem.");
+        return;
+      }
+      
+      // Exclui primeiro da nuvem, quando houver atividades concluídas.
+      if (completedIds.length && fitnessUserId && window.vivaFitSupabase) {
+        const { error } = await window.vivaFitSupabase
+          .from("fitness_activities")
+          .delete()
+          .eq("user_id", fitnessUserId)
+          .in("external_id", completedIds);
+        
+        if (error) {
+          console.error("Erro ao limpar histórico na nuvem:", error);
+          showToast("Não foi possível limpar o histórico na nuvem.");
+          return;
+        }
+      }
+      
+      // Mantém atividades que ainda não foram concluídas.
+      activities = activities.filter(item => !item.done);
+      save(VF.keys.activities, activities);
+      
+      // Remove somente caminhadas finalizadas.
+      data.sessions = [];
+      persist();
+      renderWalkingHistory();
+      renderAll();
+      
+      showToast("Históricos concluídos apagados com sucesso.");
+    });
+  }
 
   function updateUI() {
     if (data.date !== localDate()) {
