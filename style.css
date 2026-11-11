@@ -792,7 +792,35 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: va
   .gps-map-compact {
     height: 200px;
   }
+  /* Organização dos botões do cabeçalho no celular */
+@media (max-width: 700px) {
+  .topbar {
+    gap: 6px;
+  }
   
+  .top-cta {
+    order: 1;
+    margin-left: auto;
+    flex-shrink: 1;
+    font-size: .72rem;
+    padding: 8px;
+  }
+  
+  #vfAccountButton {
+    order: 2;
+    margin-left: 0 !important;
+    flex-shrink: 1;
+    font-size: .72rem;
+    padding: 8px;
+    white-space: nowrap;
+  }
+  
+  .menu-toggle {
+    order: 3;
+    flex-shrink: 0;
+    padding: 5px;
+  }
+}
  
 }
 
