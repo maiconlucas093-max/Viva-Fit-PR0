@@ -2245,16 +2245,7 @@ const walkingHistory = document.getElementById("walkingHistory");
     
   }
   
-  // Corrige o tamanho do mapa ao abrir a tela GPS.
-  window.addEventListener("hashchange", () => {
-    if (window.location.hash === "#gps") {
-      setTimeout(() => {
-        if (gpsLeafletMap) {
-          gpsLeafletMap.invalidateSize();
-        }
-      }, 250);
-    }
-  });
+
   
   // FIM DA INICIALIZAÇÃO DOS MAPAS
 
