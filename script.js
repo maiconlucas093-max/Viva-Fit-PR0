@@ -1793,9 +1793,24 @@ function initCalendar() {
   const next = $("#calendarNextMonth");
   const grid = $("#calendarGrid");
   
-  if (previous) {
+    if (previous) {
     previous.addEventListener("click", () => {
-      calendarCurrentDate.setMonth(calendarCurrentDate.getMonth() - 1);
+      calendarCurrentDate = new Date(
+        calendarCurrentDate.getFullYear(),
+        calendarCurrentDate.getMonth() - 1,
+        1
+      );
+      renderCalendar();
+    });
+  }
+  
+  if (next) {
+    next.addEventListener("click", () => {
+      calendarCurrentDate = new Date(
+        calendarCurrentDate.getFullYear(),
+        calendarCurrentDate.getMonth() + 1,
+        1
+      );
       renderCalendar();
     });
   }
