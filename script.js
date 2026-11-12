@@ -2475,6 +2475,18 @@ function initHydration() {
 }
 
 const REMINDERS_KEY = "vivafit_reminders_v1";
+// Registra o Service Worker para notificações push
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(registration => {
+        console.log('Service Worker registrado:', registration.scope);
+      })
+      .catch(error => {
+        console.error('Erro ao registrar Service Worker:', error);
+      });
+  });
+}
 
 function getReminders() {
   const reminders = load(REMINDERS_KEY, []);
