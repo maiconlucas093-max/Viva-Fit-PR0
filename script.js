@@ -3273,10 +3273,12 @@ const walkingHistory = document.getElementById("walkingHistory");
       ).addTo(sessionLeafletMap);
       
       sessionGpsRoute = L.polyline([], {
-        color: "#b9f36b",
-        weight: 5,
-        opacity: 0.9
-      }).addTo(sessionLeafletMap);
+  color: "#b9f36b",
+  weight: 7,
+  opacity: 1,
+  lineCap: "round",
+  lineJoin: "round"
+}).addTo(sessionLeafletMap);
     }
     
     
@@ -3433,7 +3435,7 @@ const walkingHistory = document.getElementById("walkingHistory");
         
         const accuracy = position.coords.accuracy;
         
-        if (!Number.isFinite(accuracy) || accuracy > 20) {
+        if (!Number.isFinite(accuracy) || accuracy > 15) {
           setSessionStatus("Aguardando um sinal GPS mais preciso...");
           return;
         }
@@ -3461,7 +3463,7 @@ const walkingHistory = document.getElementById("walkingHistory");
           
           const speed = elapsed > 0 ? distance / elapsed : 0;
           
-          if (distance >= 3 && speed <= 8) {
+          if (distance >= 1.5 && speed <= 8) {
             session.gpsDistanceMeters =
               (session.gpsDistanceMeters || 0) + distance;
             
