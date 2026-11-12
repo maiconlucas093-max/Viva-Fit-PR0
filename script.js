@@ -656,8 +656,9 @@ $("#activityList").addEventListener("click", event => {
 
   if (!confirm("Deseja excluir esta atividade?")) return;
 
-  activities = activities.filter(item => item.id !== button.dataset.id);
+    activities = activities.filter(item => item.id !== button.dataset.id);
   save(VF.keys.activities, activities);
+  deleteFitnessActivity(button.dataset.id);
   renderAll();
   showToast("Atividade excluída.");
 });
