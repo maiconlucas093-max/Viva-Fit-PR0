@@ -1,17 +1,15 @@
 /* =========================================
-   VIVAFIT PRO — CONEXÃO SUPABASE COMPARTILHADA
+   VIVAFIT PRO — CONEXÃO SUPABASE
    ========================================= */
 
 (function() {
   "use strict";
   
   const SUPABASE_URL =
-    "https://fwcfuxsvwexpuxozpkuj.supabase.co";
+    "https://izuqzshzbeaftocaydum.supabase.co";
   
-  // Copie a chave publishable do arquivo
-  // supabase.js do projeto PROSPERA.
   const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_Ba1XXaQ7tFaZg7ebr78rYg_uQas1i7D";
+    "sb_publishable_0p8LCYjx_4EUfAh6iDWfvw_VLZtJVDd";
   
   if (!window.supabase || !window.supabase.createClient) {
     console.error(
@@ -35,6 +33,6 @@
   window.vivaFitSupabase = client;
   
   console.info(
-    "VivaFit Pro: conexão compartilhada inicializada."
+    "VivaFit Pro: conexão Supabase inicializada."
   );
 })();
