@@ -1,0 +1,13 @@
+
+{
+  "name": "VivaFit PRO",
+  "short_name": "VivaFit",
+  "description": "Seus treinos, metas e lembretes fitness em um só lugar.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101510",
+  "theme_color": "#101510",
+  "lang": "pt-BR"
+}
