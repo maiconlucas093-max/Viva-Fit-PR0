@@ -222,6 +222,153 @@ const PRODUCTS = [
   }
 ];
 
+const EXERCISES = [
+  {
+    id: "agachamento",
+    name: "Agachamento livre",
+    category: "Força",
+    muscle: "Pernas e glúteos",
+    icon: "🦵",
+    image: "images/exercicios/agachamento.jpg",
+    video: "",
+    sets: "3 séries",
+    reps: "10 a 12 repetições",
+    instructions: [
+      "Fique em pé com os pés aproximadamente na largura dos ombros.",
+      "Flexione os joelhos e leve o quadril para trás.",
+      "Desça apenas até onde conseguir manter o controle.",
+      "Retorne à posição inicial sem travar os joelhos."
+    ],
+    precautions: "Mantenha os pés apoiados e evite forçar a amplitude. Comece sem carga."
+  },
+  {
+    id: "flexao",
+    name: "Flexão de braços",
+    category: "Força",
+    muscle: "Peito, ombros e tríceps",
+    icon: "💪",
+    image: "images/exercicios/flexao.jpg",
+    video: "",
+    sets: "3 séries",
+    reps: "6 a 10 repetições",
+    instructions: [
+      "Apoie as mãos no chão um pouco além da largura dos ombros.",
+      "Mantenha o tronco alinhado.",
+      "Flexione os cotovelos e aproxime o peito do chão.",
+      "Empurre o chão para retornar."
+    ],
+    precautions: "Se necessário, faça a versão com os joelhos apoiados. Não force os ombros."
+  },
+  {
+    id: "prancha",
+    name: "Prancha abdominal",
+    category: "Core",
+    muscle: "Abdômen",
+    icon: "🧘",
+    image: "images/exercicios/prancha.jpg",
+    video: "",
+    sets: "3 séries",
+    reps: "15 a 30 segundos",
+    instructions: [
+      "Apoie os antebraços e as pontas dos pés no chão.",
+      "Mantenha o corpo alinhado.",
+      "Contraia suavemente o abdômen.",
+      "Respire normalmente durante a posição."
+    ],
+    precautions: "Evite deixar o quadril cair ou subir demais. Interrompa se sentir dor."
+  },
+  {
+    id: "polichinelo",
+    name: "Polichinelo",
+    category: "Cardio",
+    muscle: "Corpo inteiro",
+    icon: "🏃",
+    image: "images/exercicios/polichinelo.jpg",
+    video: "",
+    sets: "3 séries",
+    reps: "20 a 30 segundos",
+    instructions: [
+      "Comece em pé com os braços ao lado do corpo.",
+      "Afaste os pés em um salto leve enquanto eleva os braços.",
+      "Retorne à posição inicial.",
+      "Repita em ritmo confortável."
+    ],
+    precautions: "Use uma superfície adequada. Se necessário, faça os movimentos sem saltar."
+  },
+  {
+    id: "avanco",
+    name: "Avanço alternado",
+    category: "Força",
+    muscle: "Pernas e glúteos",
+    icon: "🦵",
+    image: "images/exercicios/avanco.jpg",
+    video: "",
+    sets: "3 séries",
+    reps: "8 repetições por perna",
+    instructions: [
+      "Fique em pé com os pés afastados na largura do quadril.",
+      "Dê um passo à frente.",
+      "Flexione os joelhos de forma controlada.",
+      "Empurre o chão e retorne, alternando as pernas."
+    ],
+    precautions: "Mantenha o equilíbrio e não force os joelhos. Use apoio se precisar."
+  },
+  {
+    id: "ponte-gluteos",
+    name: "Ponte de glúteos",
+    category: "Força",
+    muscle: "Glúteos",
+    icon: "🍑",
+    image: "images/exercicios/ponte-gluteos.jpg",
+    video: "",
+    sets: "3 séries",
+    reps: "12 repetições",
+    instructions: [
+      "Deite de costas com os joelhos flexionados.",
+      "Mantenha os pés apoiados no chão.",
+      "Eleve o quadril de forma controlada.",
+      "Desça lentamente."
+    ],
+    precautions: "Evite arquear excessivamente a lombar."
+  },
+  {
+    id: "elevacao-panturrilha",
+    name: "Elevação de panturrilhas",
+    category: "Força",
+    muscle: "Panturrilhas",
+    icon: "🦶",
+    image: "images/exercicios/panturrilha.jpg",
+    video: "",
+    sets: "3 séries",
+    reps: "12 a 15 repetições",
+    instructions: [
+      "Fique em pé com os pés paralelos.",
+      "Eleve os calcanhares lentamente.",
+      "Faça uma breve pausa na posição elevada.",
+      "Retorne devagar ao chão."
+    ],
+    precautions: "Use uma parede ou apoio para manter o equilíbrio."
+  },
+  {
+    id: "abdominal-curto",
+    name: "Abdominal curto",
+    category: "Core",
+    muscle: "Abdômen",
+    icon: "🧘",
+    image: "images/exercicios/abdominal.jpg",
+    video: "",
+    sets: "3 séries",
+    reps: "10 a 12 repetições",
+    instructions: [
+      "Deite de costas com os joelhos flexionados.",
+      "Apoie as mãos suavemente junto à cabeça ou sobre o peito.",
+      "Eleve um pouco os ombros contraindo o abdômen.",
+      "Retorne lentamente."
+    ],
+    precautions: "Não puxe a cabeça com as mãos nem force o pescoço."
+  }
+];
+
 
 /* ---------- Blog inicial ---------- */
 
