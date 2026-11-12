@@ -1505,3 +1505,99 @@ a.feature-hub-card {
     transition: none;
   }
 }
+
+/* ---------- Biblioteca de exercícios ---------- */
+
+.exercise-card {
+  min-width: 0;
+}
+
+.exercise-visual {
+  min-height: 145px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #1d2c19, #101910);
+}
+
+.exercise-visual span {
+  font-size: 4rem;
+  filter: drop-shadow(0 5px 12px rgba(0, 0, 0, .3));
+}
+
+.exercise-card .shop-product-body h3 {
+  font-size: 1rem;
+}
+
+.exercise-card .shop-product-body .btn {
+  width: 100%;
+  margin-top: 12px;
+}
+
+#exerciseLibraryView .panel {
+  margin-top: 20px;
+}
+
+#exerciseLibraryView label {
+  display: block;
+  margin: 14px 0 7px;
+  font-size: .82rem;
+  font-weight: 700;
+}
+
+#exerciseLibraryView input,
+#exerciseLibraryView select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 13px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--dark);
+  color: var(--ink);
+  font: inherit;
+}
+
+#exerciseDetail {
+  line-height: 1.7;
+}
+
+#exerciseDetail h4 {
+  margin: 20px 0 8px;
+  color: var(--green);
+}
+
+#exerciseDetail ol {
+  padding-left: 22px;
+}
+
+#exerciseDetail li {
+  margin-bottom: 9px;
+}
+
+#exerciseDetail .btn {
+  width: 100%;
+  margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+  #exerciseLibraryView .shop-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .exercise-visual {
+    min-height: 115px;
+  }
+
+  .exercise-visual span {
+    font-size: 3.2rem;
+  }
+
+  .exercise-card .shop-product-body {
+    padding: 12px;
+  }
+
+  .exercise-card .shop-product-body h3 {
+    font-size: .9rem;
+  }
+}
+
