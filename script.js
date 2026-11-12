@@ -2513,17 +2513,121 @@ function renderReminders() {
   }).join("");
 }
 
+
 function initReminders() {
   const saveButton = $("#reminderSave");
   const list = $("#reminderList");
 
+  let reminderAudioContext = null;
+
+  function unlockReminderSound() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+
+      if (!reminderAudioContext) {
+        reminderAudioContext = new AudioCtx();
+      }
+
+      if (reminderAudioContext.state === "suspended") {
+        reminderAudioContext.resume();
+      }
+    } catch (error) {
+      console.warn("Áudio indisponível:", error);
+    }
+  }
+
+  function playReminderSound() {
+    try {
+      if (!reminderAudioContext) return;
+
+      const ctx = reminderAudioContext;
+
+      if (ctx.state !== "running") return;
+
+      [0, 0.35, 0.7].forEach(delay => {
+        const oscillator = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        oscillator.frequency.value = 880;
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+
+        const start = ctx.currentTime + delay;
+
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.35, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.25);
+
+        oscillator.start(start);
+        oscillator.stop(start + 0.27);
+      });
+    } catch (error) {
+      console.warn("Não foi possível tocar o alerta:", error);
+    }
+  }
+
+  function checkReminders() {
+    const now = new Date();
+
+    const date = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0")
+    ].join("-");
+
+    const time = [
+      String(now.getHours()).padStart(2, "0"),
+      String(now.getMinutes()).padStart(2, "0")
+    ].join(":");
+
+    const today = now.getDay();
+
+    getReminders().forEach(reminder => {
+      if (!Array.isArray(reminder.days)) return;
+      if (!reminder.days.includes(today)) return;
+      if (reminder.time !== time) return;
+
+      const firedKey = `vivafit_reminder_fired_${date}_${reminder.id}`;
+
+      if (localStorage.getItem(firedKey)) return;
+
+      localStorage.setItem(firedKey, "1");
+
+      playReminderSound();
+
+      if (navigator.vibrate) {
+        navigator.vibrate([300, 150, 300, 150, 300]);
+      }
+
+      showToast("🔔 " + reminder.message);
+
+      if ("Notification" in window &&
+          Notification.permission === "granted") {
+        new Notification("VivaFit PRO", {
+          body: reminder.message,
+          icon: "./icon-192.png"
+        });
+      }
+    });
+  }
+
   if (saveButton) {
     saveButton.addEventListener("click", () => {
+      unlockReminderSound();
+
+      if ("Notification" in window &&
+          Notification.permission === "default") {
+        Notification.requestPermission();
+      }
+
       const type = $("#reminderType")?.value || "Personalizado";
       const messageInput = $("#reminderMessage");
-      const message = messageInput?.value.trim() || `Lembrete de ${type.toLowerCase()}`;
+      const message = messageInput?.value.trim() ||
+        `Lembrete de ${type.toLowerCase()}`;
       const time = $("#reminderTime")?.value || "";
-      const days = $$("[data-reminder-day]:checked").map(input => Number(input.value));
+      const days = $$("[data-reminder-day]:checked")
+        .map(input => Number(input.value));
 
       if (!time) {
         setText("#reminderStatus", "Escolha um horário para o lembrete.");
@@ -2536,6 +2640,7 @@ function initReminders() {
       }
 
       const reminders = getReminders();
+
       reminders.push({
         id: uid(),
         type,
@@ -2546,9 +2651,11 @@ function initReminders() {
 
       if (save(REMINDERS_KEY, reminders)) {
         if (messageInput) messageInput.value = "";
+
         $$("[data-reminder-day]").forEach(input => {
           input.checked = false;
         });
+
         setText("#reminderStatus", "Lembrete salvo com sucesso!");
         renderReminders();
         showToast("Lembrete salvo!");
@@ -2562,7 +2669,8 @@ function initReminders() {
       if (!button) return;
 
       const id = button.dataset.deleteReminder;
-      const reminders = getReminders().filter(item => item.id !== id);
+      const reminders = getReminders()
+        .filter(item => item.id !== id);
 
       if (save(REMINDERS_KEY, reminders)) {
         renderReminders();
@@ -2572,7 +2680,11 @@ function initReminders() {
   }
 
   renderReminders();
+
+  checkReminders();
+  setInterval(checkReminders, 10000);
 }
+
 
 function renderAll() {
   renderActivities();
