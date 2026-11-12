@@ -2529,6 +2529,131 @@ function renderReminders() {
 function initReminders() {
   const saveButton = $("#reminderSave");
   const list = $("#reminderList");
+    // Ativa notificações push neste celular e salva a inscrição no Supabase.
+  const pushButton = $("#enablePushNotifications");
+  const pushStatus = $("#pushNotificationStatus");
+
+  const VAPID_PUBLIC_KEY =
+    "BEyzMwKtYfJZbNqY2a8C58mAIQQIt4TbddveniBiIkbM8SsQcNiDmFPa4GIG5NA4vHA4SzPm3U388lDPGgvn2lM";
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = "=".repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+
+    const rawData = window.atob(base64);
+    const output = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      output[i] = rawData.charCodeAt(i);
+    }
+
+    return output;
+  }
+
+  if (pushButton) {
+    pushButton.addEventListener("click", async () => {
+      try {
+        if (!("serviceWorker" in navigator) ||
+            !("PushManager" in window) ||
+            !("Notification" in window)) {
+          throw new Error(
+            "Este navegador não oferece suporte às notificações push."
+          );
+        }
+
+        if (pushStatus) {
+          pushStatus.textContent = "Verificando sua conta...";
+        }
+
+        const { data: sessionData, error: sessionError } =
+          await supabase.auth.getSession();
+
+        if (sessionError) throw sessionError;
+
+        const user = sessionData.session?.user;
+
+        if (!user) {
+          throw new Error(
+            "Entre na sua conta VivaFit PRO antes de ativar as notificações."
+          );
+        }
+
+        if (Notification.permission === "denied") {
+          throw new Error(
+            "As notificações estão bloqueadas no navegador. Libere a permissão nas configurações do Chrome."
+          );
+        }
+
+        if (Notification.permission !== "granted") {
+          const permission = await Notification.requestPermission();
+
+          if (permission !== "granted") {
+            throw new Error("Você não autorizou as notificações.");
+          }
+        }
+
+        if (pushStatus) {
+          pushStatus.textContent = "Registrando este celular...";
+        }
+
+        const registration = await navigator.serviceWorker.ready;
+
+        let subscription =
+          await registration.pushManager.getSubscription();
+
+        if (!subscription) {
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey:
+              urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+          });
+        }
+
+        const subscriptionData = subscription.toJSON();
+
+        if (!subscriptionData.keys?.p256dh ||
+            !subscriptionData.keys?.auth) {
+          throw new Error(
+            "Não foi possível obter as chaves da inscrição."
+          );
+        }
+
+        const { error: saveError } = await supabase
+          .from("push_subscriptions")
+          .upsert({
+            user_id: user.id,
+            endpoint: subscription.endpoint,
+            p256dh: subscriptionData.keys.p256dh,
+            auth: subscriptionData.keys.auth,
+            timezone:
+              Intl.DateTimeFormat().resolvedOptions().timeZone ||
+              "America/Sao_Paulo"
+          }, {
+            onConflict: "endpoint"
+          });
+
+        if (saveError) throw saveError;
+
+        if (pushStatus) {
+          pushStatus.textContent =
+            "Notificações autorizadas e celular registrado com sucesso!";
+        }
+
+        showToast("Notificações ativadas neste celular!");
+      } catch (error) {
+        console.error("Erro ao ativar notificações push:", error);
+
+        if (pushStatus) {
+          pushStatus.textContent =
+            error.message || "Não foi possível ativar as notificações.";
+        }
+
+        showToast("Não foi possível ativar as notificações.");
+      }
+    });
+  }
 
   let reminderAudioContext = null;
 
