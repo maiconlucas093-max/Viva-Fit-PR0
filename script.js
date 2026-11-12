@@ -2592,7 +2592,7 @@ function renderAll() {
 
 function init() {
   initNavigation();
-  initExerciseLibrary(); l
+  initExerciseLibrary();
   initCalendar();
   initHydration();
   initReminders();
