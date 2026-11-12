@@ -3282,7 +3282,11 @@ const walkingHistory = document.getElementById("walkingHistory");
     
   }
   
+  try {
   initializeGpsMaps();
+} catch (error) {
+  console.error("Erro ao inicializar o mapa da caminhada:", error);
+}
   
 // Atualiza a localização e o percurso no mapa compacto.
   function updateGpsMaps(current, addRoutePoint) {
