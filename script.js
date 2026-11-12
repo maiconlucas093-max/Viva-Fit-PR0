@@ -644,7 +644,8 @@ $("#activityList").addEventListener("change", event => {
   item.done = input.checked;
   item.completedAt = item.done ? new Date().toISOString() : null;
 
-  save(VF.keys.activities, activities);
+    save(VF.keys.activities, activities);
+  saveFitnessActivity(item);
   renderAll();
   showToast(item.done ? "Atividade concluída!" : "Atividade reaberta.");
 });
