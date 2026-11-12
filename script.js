@@ -502,6 +502,163 @@ if (!Array.isArray(articles)) {
 
 save(VF.keys.articles, articles);
 
+/* ---------- Biblioteca de exercícios ---------- */
+
+function initExerciseLibrary() {
+  const search = $("#exerciseSearch");
+  const category = $("#exerciseCategory");
+  const muscle = $("#exerciseMuscle");
+  const grid = $("#exerciseLibraryGrid");
+  const empty = $("#exerciseLibraryEmpty");
+  const detail = $("#exerciseDetail");
+
+  if (!search || !category || !muscle || !grid || !empty || !detail) return;
+
+  const categories = [...new Set(EXERCISES.map(item => item.category))];
+  const muscles = [...new Set(EXERCISES.map(item => item.muscle))];
+
+  category.innerHTML =
+    '<option value="">Todas as categorias</option>' +
+    categories.map(value =>
+      `<option value="${escapeHTML(value)}">${escapeHTML(value)}</option>`
+    ).join("");
+
+  muscle.innerHTML =
+    '<option value="">Todos os grupos musculares</option>' +
+    muscles.map(value =>
+      `<option value="${escapeHTML(value)}">${escapeHTML(value)}</option>`
+    ).join("");
+
+  function render() {
+    const term = search.value.trim().toLowerCase();
+
+    const filtered = EXERCISES.filter(item => {
+      const matchesName = item.name.toLowerCase().includes(term);
+      const matchesCategory = !category.value || item.category === category.value;
+      const matchesMuscle = !muscle.value || item.muscle === muscle.value;
+
+      return matchesName && matchesCategory && matchesMuscle;
+    });
+
+    grid.innerHTML = filtered.map(item => `
+      <article class="shop-card exercise-card">
+        <div class="shop-product-visual exercise-visual">
+          <span aria-hidden="true">${escapeHTML(item.icon)}</span>
+        </div>
+        <div class="shop-product-body">
+          <span class="shop-category-label">${escapeHTML(item.category)}</span>
+          <h3>${escapeHTML(item.name)}</h3>
+          <p>${escapeHTML(item.muscle)}</p>
+          <button class="btn btn-primary" type="button"
+            data-exercise-detail="${escapeHTML(item.id)}">
+            Ver exercício
+          </button>
+        </div>
+      </article>
+    `).join("");
+
+    empty.hidden = filtered.length > 0;
+  }
+
+  function showDetail(item) {
+    if (!item) return;
+
+    detail.hidden = false;
+    detail.innerHTML = `
+      <div class="panel-heading">
+        <div>
+          <span class="eyebrow">${escapeHTML(item.category)}</span>
+          <h3>${escapeHTML(item.name)}</h3>
+          <p>${escapeHTML(item.muscle)}</p>
+        </div>
+      </div>
+
+      <h4>Como executar</h4>
+      <ol>
+        ${item.instructions.map(step => `<li>${escapeHTML(step)}</li>`).join("")}
+      </ol>
+
+      <h4>Sugestão inicial</h4>
+      <p>${escapeHTML(item.sets)} · ${escapeHTML(item.reps)}</p>
+
+      <h4>Cuidados</h4>
+      <p>${escapeHTML(item.precautions)}</p>
+
+      <label for="exerciseMinutes">Duração do treino (minutos)</label>
+      <input id="exerciseMinutes" type="number" min="1" max="600" value="15">
+
+      <button class="btn btn-primary" type="button"
+        data-add-exercise="${escapeHTML(item.id)}">
+        Adicionar ao treino de hoje
+      </button>
+
+      <button class="btn btn-secondary" type="button" id="closeExerciseDetail">
+        Fechar detalhes
+      </button>
+    `;
+
+    detail.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  search.addEventListener("input", render);
+  category.addEventListener("change", render);
+  muscle.addEventListener("change", render);
+
+  grid.addEventListener("click", event => {
+    const button = event.target.closest("[data-exercise-detail]");
+    if (!button) return;
+
+    const item = EXERCISES.find(exercise =>
+      exercise.id === button.dataset.exerciseDetail
+    );
+
+    showDetail(item);
+  });
+
+  detail.addEventListener("click", event => {
+    if (event.target.closest("#closeExerciseDetail")) {
+      detail.hidden = true;
+      return;
+    }
+
+    const button = event.target.closest("[data-add-exercise]");
+    if (!button) return;
+
+    const item = EXERCISES.find(exercise =>
+      exercise.id === button.dataset.addExercise
+    );
+
+    const minutes = Number($("#exerciseMinutes").value);
+
+    if (!item || !Number.isInteger(minutes) || minutes < 1 || minutes > 600) {
+      showToast("Informe uma duração entre 1 e 600 minutos.");
+      return;
+    }
+
+    const activity = {
+      id: uid(),
+      name: item.name,
+      minutes,
+      date: todayISO(),
+      done: false,
+      createdAt: new Date().toISOString()
+    };
+
+    activities.push(activity);
+
+    if (!save(VF.keys.activities, activities)) {
+      activities = activities.filter(entry => entry.id !== activity.id);
+      return;
+    }
+
+    saveFitnessActivity(activity);
+    renderAll();
+    showToast("Exercício adicionado ao treino de hoje!");
+  });
+
+  render();
+}
+
 /* ---------- Navegação e data ---------- */
 
 function initNavigation() {
@@ -2420,6 +2577,7 @@ function renderAll() {
 
 function init() {
   initNavigation();
+  initExerciseLibrary(); l
   initCalendar();
   initHydration();
   initReminders();
