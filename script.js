@@ -390,6 +390,9 @@ function initNavigation() {
     if (walkingEvolutionView) walkingEvolutionView.hidden = !showWalkingEvolution;
     if (hydrationView) hydrationView.hidden = !showHydration;
     if (weightEvolutionView) weightEvolutionView.hidden = !showWeightEvolution;
+        if (showWeightEvolution) {
+      requestAnimationFrame(renderWeightEvolution);
+    }
   }
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener("click", () => {
@@ -898,7 +901,160 @@ function renderWeights() {
   $("#weightEmpty").hidden = sorted.length > 0;
   drawWeightChart(sorted);
 }
-
+function renderWeightEvolution() {
+  const sorted = [...weights].sort((a, b) =>
+    a.date.localeCompare(b.date) ||
+    String(a.createdAt).localeCompare(String(b.createdAt))
+  );
+  
+  const latest = sorted[sorted.length - 1];
+  
+  setText(
+    "#weightEvolutionLatest",
+    latest ? `${Number(latest.value).toLocaleString("pt-BR")} kg` : "—"
+  );
+  
+  setText("#weightEvolutionCount", sorted.length);
+  
+  let changeText = "Aguardando registros";
+  
+  if (sorted.length >= 2) {
+    const firstWeight = Number(sorted[0].value);
+    const lastWeight = Number(latest.value);
+    const change = lastWeight - firstWeight;
+    
+    changeText = `${change > 0 ? "+" : ""}${change.toLocaleString("pt-BR", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1
+    })} kg`;
+  }
+  
+  setText("#weightEvolutionChange", changeText);
+  
+  const history = $("#weightEvolutionHistory");
+  
+  if (history) {
+    history.innerHTML = sorted.slice().reverse().slice(0, 30).map(item => `
+      <div class="history-item">
+        <span class="history-date">${formatDate(item.date)}</span>
+        <strong class="history-value">${Number(item.value).toLocaleString("pt-BR")} kg</strong>
+      </div>
+    `).join("");
+  }
+  
+  const canvas = $("#weightEvolutionChart");
+  
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext("2d");
+  const rect = canvas.getBoundingClientRect();
+  const width = Math.max(260, rect.width);
+  const height = Math.max(200, rect.height);
+  const ratio = Math.min(window.devicePixelRatio || 1, 2);
+  
+  canvas.width = Math.round(width * ratio);
+  canvas.height = Math.round(height * ratio);
+  
+  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+  ctx.clearRect(0, 0, width, height);
+  
+  const data = sorted.slice(-12);
+  
+  if (!data.length) {
+    ctx.fillStyle = "#8b9389";
+    ctx.font = "13px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Seus registros aparecerão aqui", width / 2, height / 2);
+    setText("#weightEvolutionNote", "Registre seu peso para acompanhar sua evolução.");
+    return;
+  }
+  
+  const values = data.map(item => Number(item.value));
+  let min = Math.min(...values);
+  let max = Math.max(...values);
+  
+  if (min === max) {
+    min -= 1;
+    max += 1;
+  } else {
+    const padding = (max - min) * 0.15;
+    min -= padding;
+    max += padding;
+  }
+  
+  const left = 43;
+  const right = 15;
+  const top = 20;
+  const bottom = 37;
+  const plotW = width - left - right;
+  const plotH = height - top - bottom;
+  
+  ctx.font = "10px sans-serif";
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "#8b9389";
+  
+  for (let i = 0; i <= 4; i++) {
+    const value = max - ((max - min) / 4) * i;
+    const y = top + (plotH / 4) * i;
+    
+    ctx.fillText(value.toFixed(1), left - 8, y);
+    
+    ctx.strokeStyle = "rgba(139, 147, 137, 0.2)";
+    ctx.beginPath();
+    ctx.moveTo(left, y);
+    ctx.lineTo(width - right, y);
+    ctx.stroke();
+  }
+  
+  const points = data.map((item, index) => ({
+    x: data.length === 1 ?
+      left + plotW / 2 :
+      left + (plotW / (data.length - 1)) * index,
+    y: top + ((max - Number(item.value)) / (max - min)) * plotH
+  }));
+  
+  if (points.length > 1) {
+    ctx.beginPath();
+    ctx.strokeStyle = "#35a66f";
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = "round";
+    
+    points.forEach((point, index) => {
+      if (index === 0) ctx.moveTo(point.x, point.y);
+      else ctx.lineTo(point.x, point.y);
+    });
+    
+    ctx.stroke();
+  }
+  
+  points.forEach(point => {
+    ctx.beginPath();
+    ctx.fillStyle = "#35a66f";
+    ctx.arc(point.x, point.y, 4, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillStyle = "#8b9389";
+  
+  data.forEach((item, index) => {
+    if (data.length > 6 && index % 2 !== 0) return;
+    
+    const x = points[index].x;
+    const date = item.date.split("-").reverse().slice(0, 2).join("/");
+    
+    ctx.fillText(date, x, height - bottom + 12);
+  });
+  
+  setText(
+    "#weightEvolutionNote",
+    data.length < 2 ?
+    "Adicione mais um registro para comparar sua evolução." :
+    `Exibindo os últimos ${data.length} registros. A variação compara o primeiro e o último peso registrados.`
+  );
+}
 $("#weightHistory").addEventListener("click", event => {
   const button = event.target.closest("[data-weight-delete]");
   if (!button) return;
@@ -1998,7 +2154,8 @@ function renderAll() {
   renderAchievements();
   renderCalendar();
   renderGoals();
-  renderWeights();
+    renderWeights();
+  renderWeightEvolution();
   renderRecentHistory();
   renderBlog();
   renderShop();
