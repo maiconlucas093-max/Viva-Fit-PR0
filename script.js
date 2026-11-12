@@ -373,6 +373,7 @@ function initNavigation() {
   const hydrationView = document.getElementById("hydrationView");
   const weightEvolutionView = document.getElementById("weightEvolutionView");
   const remindersView = document.getElementById("remindersView");
+  const exerciseLibraryView = document.getElementById("exerciseLibraryView");
   function updateAppViews(hash = window.location.hash) {
     const showContent = hash === "#blog" || hash === "#loja";
     const showFeatures = hash === "#funcoes";
@@ -383,7 +384,8 @@ function initNavigation() {
     const showHydration = hash === "#hidratacao";
     const showWeightEvolution = hash === "#evolucao-peso";
     const showReminders = hash === "#lembretes";
-    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration || showWeightEvolution || showReminders;
+    const showExerciseLibrary = hash === "#biblioteca-exercicios";
+    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration || showWeightEvolution || showReminders || showExerciseLibrary;
     if (contentView) contentView.hidden = !showContent;
     if (featuresHubView) featuresHubView.hidden = !showFeatures;
     if (weeklyEvolutionView) weeklyEvolutionView.hidden = !showWeeklyEvolution;
@@ -393,6 +395,7 @@ function initNavigation() {
     if (hydrationView) hydrationView.hidden = !showHydration;
     if (weightEvolutionView) weightEvolutionView.hidden = !showWeightEvolution;
     if (remindersView) remindersView.hidden = !showReminders;
+    if (exerciseLibraryView) exerciseLibraryView.hidden = !showExerciseLibrary;
         if (showWeightEvolution) {
       requestAnimationFrame(renderWeightEvolution);
     }
