@@ -392,6 +392,7 @@ function initNavigation() {
     if (walkingEvolutionView) walkingEvolutionView.hidden = !showWalkingEvolution;
     if (hydrationView) hydrationView.hidden = !showHydration;
     if (weightEvolutionView) weightEvolutionView.hidden = !showWeightEvolution;
+    if (remindersView) remindersView.hidden = !showReminders;
         if (showWeightEvolution) {
       requestAnimationFrame(renderWeightEvolution);
     }
