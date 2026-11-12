@@ -627,7 +627,7 @@ $("#activityForm").addEventListener("submit", event => {
   });
 
   if (!save(VF.keys.activities, activities)) return;
-
+saveFitnessActivity(activities[activities.length - 1]);
   $("#activityName").value = "";
   $("#activityMinutes").value = "30";
   renderAll();
