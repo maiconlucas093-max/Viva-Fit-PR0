@@ -307,7 +307,7 @@ const EXERCISES = [
     reps: "8 repetições por perna",
     instructions: [
       "Fique em pé com os pés afastados na largura do quadril.",
-      "Dê um passo à frente.",
+      "Dê um passo para trás.",
       "Flexione os joelhos de forma controlada.",
       "Empurre o chão e retorne, alternando as pernas."
     ],
@@ -540,22 +540,37 @@ function initExerciseLibrary() {
       return matchesName && matchesCategory && matchesMuscle;
     });
 
-    grid.innerHTML = filtered.map(item => `
-      <article class="shop-card exercise-card">
-        <div class="shop-product-visual exercise-visual">
-          <span aria-hidden="true">${escapeHTML(item.icon)}</span>
-        </div>
-        <div class="shop-product-body">
-          <span class="shop-category-label">${escapeHTML(item.category)}</span>
-          <h3>${escapeHTML(item.name)}</h3>
-          <p>${escapeHTML(item.muscle)}</p>
-          <button class="btn btn-primary" type="button"
-            data-exercise-detail="${escapeHTML(item.id)}">
-            Ver exercício
-          </button>
-        </div>
-      </article>
-    `).join("");
+    
+grid.innerHTML = filtered.map(item => `
+  <article class="shop-card exercise-card">
+    <div class="shop-product-visual exercise-visual">
+      <img
+        src="${escapeHTML(item.image)}"
+        alt="Ilustração de ${escapeHTML(item.name)}"
+        loading="lazy"
+        onerror="this.hidden=true"
+      >
+    </div>
+    <div class="shop-product-body">
+      <span class="shop-category-label">${escapeHTML(item.category)}</span>
+      <h3>${escapeHTML(item.name)}</h3>
+      <p>${escapeHTML(item.muscle)}</p>
+      <button class="btn btn-primary" type="button"
+        data-exercise-detail="${escapeHTML(item.id)}">
+        Ver exercício
+      </button>
+    </div>
+  </article>
+`).join("") + `
+  <p class="exercise-art-credit">
+    Ilustrações: Open Exercise Art / Alex Mollard.
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/"
+       target="_blank" rel="noopener noreferrer">
+      Licença CC BY-SA 4.0
+    </a>.
+  </p>
+`;
+
 
     empty.hidden = filtered.length > 0;
   }
