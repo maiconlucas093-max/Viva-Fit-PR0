@@ -2271,6 +2271,12 @@ function init() {
   initCalendar();
   initHydration();
   initReminders();
+    if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+      .catch(error => {
+        console.error("Erro ao registrar notificações:", error);
+      });
+  }
   renderAll();
 
   // Redesenha o gráfico quando a largura disponível muda.
