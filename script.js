@@ -383,7 +383,7 @@ function initNavigation() {
     const showHydration = hash === "#hidratacao";
     const showWeightEvolution = hash === "#evolucao-peso";
     const showReminders = hash === "#lembretes";
-    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration || showWeightEvolution;|| showReminders
+    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration || showWeightEvolution || showReminders;
     if (contentView) contentView.hidden = !showContent;
     if (featuresHubView) featuresHubView.hidden = !showFeatures;
     if (weeklyEvolutionView) weeklyEvolutionView.hidden = !showWeeklyEvolution;
