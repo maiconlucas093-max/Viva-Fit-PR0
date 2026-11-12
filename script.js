@@ -371,7 +371,7 @@ function initNavigation() {
   const calendarView = document.getElementById("calendarView");
   const walkingEvolutionView = document.getElementById("walkingEvolutionView");
   const hydrationView = document.getElementById("hydrationView");
-  
+  const weightEvolutionView = document.getElementById("weightEvolutionView");
   function updateAppViews(hash = window.location.hash) {
     const showContent = hash === "#blog" || hash === "#loja";
     const showFeatures = hash === "#funcoes";
@@ -380,7 +380,8 @@ function initNavigation() {
     const showCalendar = hash === "#calendario";
     const showWalkingEvolution = hash === "#evolucao-caminhadas";
     const showHydration = hash === "#hidratacao";
-    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration;
+    const showWeightEvolution = hash === "#evolucao-peso";
+    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration || showWeightEvolution;
     if (contentView) contentView.hidden = !showContent;
     if (featuresHubView) featuresHubView.hidden = !showFeatures;
     if (weeklyEvolutionView) weeklyEvolutionView.hidden = !showWeeklyEvolution;
@@ -388,6 +389,7 @@ function initNavigation() {
     if (calendarView) calendarView.hidden = !showCalendar;
     if (walkingEvolutionView) walkingEvolutionView.hidden = !showWalkingEvolution;
     if (hydrationView) hydrationView.hidden = !showHydration;
+    if (weightEvolutionView) weightEvolutionView.hidden = !showWeightEvolution;
   }
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener("click", () => {
