@@ -2270,6 +2270,7 @@ function init() {
   initNavigation();
   initCalendar();
   initHydration();
+  initReminders();
   renderAll();
 
   // Redesenha o gráfico quando a largura disponível muda.
