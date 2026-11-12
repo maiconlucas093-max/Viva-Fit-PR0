@@ -2278,7 +2278,7 @@ function init() {
       });
   }
   renderAll();
-
+initializeFitnessSync();
   // Redesenha o gráfico quando a largura disponível muda.
   let resizeTimer;
   window.addEventListener("resize", () => {
