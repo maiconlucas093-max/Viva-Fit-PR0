@@ -372,6 +372,7 @@ function initNavigation() {
   const walkingEvolutionView = document.getElementById("walkingEvolutionView");
   const hydrationView = document.getElementById("hydrationView");
   const weightEvolutionView = document.getElementById("weightEvolutionView");
+  const remindersView = document.getElementById("remindersView");
   function updateAppViews(hash = window.location.hash) {
     const showContent = hash === "#blog" || hash === "#loja";
     const showFeatures = hash === "#funcoes";
@@ -381,7 +382,8 @@ function initNavigation() {
     const showWalkingEvolution = hash === "#evolucao-caminhadas";
     const showHydration = hash === "#hidratacao";
     const showWeightEvolution = hash === "#evolucao-peso";
-    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration || showWeightEvolution;
+    const showReminders = hash === "#lembretes";
+    if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration || showWeightEvolution;|| showReminders
     if (contentView) contentView.hidden = !showContent;
     if (featuresHubView) featuresHubView.hidden = !showFeatures;
     if (weeklyEvolutionView) weeklyEvolutionView.hidden = !showWeeklyEvolution;
