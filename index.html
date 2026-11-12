@@ -429,7 +429,7 @@
         <a class="feature-hub-card" href="#calendario">Calendário de treinos <span>Abrir</span></a>
        <a class="feature-hub-card" href="#evolucao-caminhadas">Evolução das caminhadas <span>Abrir</span></a>
         <a class="feature-hub-card" href="#hidratacao">Hidratação <span>Abrir</span></a>
-        <button class="feature-hub-card" type="button" disabled>Evolução do peso <span>Em breve</span></button>
+        <a class="feature-hub-card" href="#evolucao-peso">Evolução do peso <span>Abrir</span></a>
         <button class="feature-hub-card" type="button" disabled>Lembretes inteligentes <span>Em breve</span></button>
         <button class="feature-hub-card" type="button" disabled>Biblioteca de exercícios <span>Em breve</span></button>
         <button class="feature-hub-card" type="button" disabled>Relatório mensal <span>Em breve</span></button>
@@ -687,6 +687,89 @@
       </div>
     </section>
   </div>
+  
+<div id="weightEvolutionView" class="app-view" hidden>
+  <section class="section-wrap content-section">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">SEU DESEMPENHO</span>
+        <h2>Evolução do peso</h2>
+        <p class="section-description">
+          Acompanhe seu histórico e visualize as mudanças do seu peso.
+        </p>
+      </div>
+    </div>
+
+    <a href="#funcoes" class="btn btn-secondary">
+      ← Voltar para funções
+    </a>
+
+    <div class="stats-grid weight-evolution-stats">
+      <article class="stat-card">
+        <span>Último peso registrado</span>
+        <strong id="weightEvolutionLatest">—</strong>
+      </article>
+
+      <article class="stat-card">
+        <span>Total de registros</span>
+        <strong id="weightEvolutionCount">0</strong>
+      </article>
+
+      <article class="stat-card">
+        <span>Variação total</span>
+        <strong id="weightEvolutionChange">—</strong>
+      </article>
+    </div>
+
+    <div class="panel weight-evolution-panel">
+      <div class="panel-heading">
+        <div>
+          <h3>Seu gráfico de evolução</h3>
+          <p>Visualização dos seus últimos registros de peso.</p>
+        </div>
+      </div>
+
+      <div class="chart-wrap weight-evolution-chart-wrap">
+        <canvas id="weightEvolutionChart" role="img" aria-label="Gráfico da evolução do peso">
+          Gráfico da evolução do peso.
+        </canvas>
+      </div>
+
+      <p class="chart-note" id="weightEvolutionNote">
+        Registre seus pesos para visualizar sua evolução.
+      </p>
+    </div>
+
+    <div class="panel weight-evolution-panel">
+      <div class="panel-heading">
+        <div>
+          <h3>Histórico de registros</h3>
+          <p>Seus registros de peso salvos no VivaFit Pro.</p>
+        </div>
+      </div>
+
+      <div id="weightEvolutionHistory">
+        <div class="empty-state">
+          Seus registros aparecerão aqui.
+        </div>
+      </div>
+    </div>
+
+    <div class="panel weight-evolution-panel">
+      <div class="panel-heading">
+        <div>
+          <h3>Registrar novo peso</h3>
+          <p>Adicione um registro para atualizar sua evolução.</p>
+        </div>
+      </div>
+
+      <a href="#inicio" class="btn btn-primary full-width">
+        Ir para registro de peso
+      </a>
+    </div>
+  </section>
+</div>
+
     <div id="hydrationView" class="app-view" hidden>
     <section class="section-wrap content-section">
       <div class="section-heading">
