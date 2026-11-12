@@ -2150,6 +2150,106 @@ function initHydration() {
   renderHydration();
 }
 
+const REMINDERS_KEY = "vivafit_reminders_v1";
+
+function getReminders() {
+  const reminders = load(REMINDERS_KEY, []);
+  return Array.isArray(reminders) ? reminders : [];
+}
+
+function renderReminders() {
+  const list = $("#reminderList");
+  if (!list) return;
+
+  const reminders = getReminders();
+
+  if (!reminders.length) {
+    list.innerHTML = '<div class="empty-state">Nenhum lembrete cadastrado.</div>';
+    return;
+  }
+
+  list.innerHTML = reminders.map(reminder => {
+    const days = reminder.days.length
+      ? reminder.days.map(day => ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"][day]).join(", ")
+      : "Sem repetição";
+
+    return `
+      <div class="reminder-item">
+        <div>
+          <strong>${escapeHTML(reminder.type)}</strong>
+          <p>${escapeHTML(reminder.message)}</p>
+          <small>${escapeHTML(reminder.time)} · ${escapeHTML(days)}</small>
+        </div>
+        <button type="button" class="btn btn-secondary"
+          data-delete-reminder="${escapeHTML(reminder.id)}">
+          Excluir
+        </button>
+      </div>
+    `;
+  }).join("");
+}
+
+function initReminders() {
+  const saveButton = $("#reminderSave");
+  const list = $("#reminderList");
+
+  if (saveButton) {
+    saveButton.addEventListener("click", () => {
+      const type = $("#reminderType")?.value || "Personalizado";
+      const messageInput = $("#reminderMessage");
+      const message = messageInput?.value.trim() || `Lembrete de ${type.toLowerCase()}`;
+      const time = $("#reminderTime")?.value || "";
+      const days = $$("[data-reminder-day]:checked").map(input => Number(input.value));
+
+      if (!time) {
+        setText("#reminderStatus", "Escolha um horário para o lembrete.");
+        return;
+      }
+
+      if (!days.length) {
+        setText("#reminderStatus", "Selecione pelo menos um dia da semana.");
+        return;
+      }
+
+      const reminders = getReminders();
+      reminders.push({
+        id: uid(),
+        type,
+        message,
+        time,
+        days
+      });
+
+      if (save(REMINDERS_KEY, reminders)) {
+        if (messageInput) messageInput.value = "";
+        $$("[data-reminder-day]").forEach(input => {
+          input.checked = false;
+        });
+        setText("#reminderStatus", "Lembrete salvo com sucesso!");
+        renderReminders();
+        showToast("Lembrete salvo!");
+      }
+    });
+  }
+
+  if (list) {
+    list.addEventListener("click", event => {
+      const button = event.target.closest("[data-delete-reminder]");
+      if (!button) return;
+
+      const id = button.dataset.deleteReminder;
+      const reminders = getReminders().filter(item => item.id !== id);
+
+      if (save(REMINDERS_KEY, reminders)) {
+        renderReminders();
+        showToast("Lembrete excluído!");
+      }
+    });
+  }
+
+  renderReminders();
+}
+
 function renderAll() {
   renderActivities();
   renderDashboard();
