@@ -2568,7 +2568,7 @@ function initReminders() {
         }
 
         const { data: sessionData, error: sessionError } =
-          await supabase.auth.getSession();
+          await window.vivaFitSupabase.auth.getSession();
 
         if (sessionError) throw sessionError;
 
@@ -2620,7 +2620,7 @@ function initReminders() {
           );
         }
 
-        const { error: saveError } = await supabase
+        const { error: saveError } = await window.vivaFitSupabase
           .from("push_subscriptions")
           .upsert({
             user_id: user.id,
