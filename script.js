@@ -3628,15 +3628,44 @@ const state = { days: 7, mode: "days", monthKey: currentMonthKey, selected: -1, 
   chartCanvas.addEventListener("pointerdown", pick);
   chartCanvas.addEventListener("pointermove", event => { if (event.buttons || event.pointerType === "touch") pick(event); });
 
+ 
   $$(".report-tab").forEach(btn => btn.addEventListener("click", () => {
-    state.days = Number(btn.dataset.days);
     state.selected = -1;
+
+    if (btn.dataset.period === "month") {
+      state.mode = "month";
+      populateMonthOptions();
+
+      if (reportMonthSelect) {
+        reportMonthSelect.hidden = false;
+      }
+    } else {
+      state.mode = "days";
+      state.days = Number(btn.dataset.days);
+
+      if (reportMonthSelect) {
+        reportMonthSelect.hidden = true;
+      }
+    }
+
     $$(".report-tab").forEach(b => b.classList.toggle("active", b === btn));
     render();
   }));
 
-  // Atualiza sempre que a lista de atividades mudar.
-  new MutationObserver(render).observe($("#activityList"), { childList: true });
+  if (reportMonthSelect) {
+    reportMonthSelect.addEventListener("change", () => {
+      state.monthKey = reportMonthSelect.value;
+      state.selected = -1;
+      render();
+    });
+  }
+
+  // Atualiza o relatório quando as atividades mudarem.
+  new MutationObserver(() => {
+    populateMonthOptions();
+    render();
+  }).observe($("#activityList"), { childList: true });
+
 
   let resizeTimer;
   window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(render, 150); });
