@@ -2829,35 +2829,56 @@ function initReminders() {
     });
   }
 
-  if (saveButton) {
-    saveButton.addEventListener("click", () => {
-      unlockReminderSound();
+  
+if (saveButton) {
+  saveButton.addEventListener("click", () => {
+    unlockReminderSound();
 
-      if ("Notification" in window &&
-          Notification.permission === "default") {
-        Notification.requestPermission();
-      }
+    if ("Notification" in window &&
+        Notification.permission === "default") {
+      Notification.requestPermission();
+    }
 
-      const type = $("#reminderType")?.value || "Personalizado";
-      const messageInput = $("#reminderMessage");
-      const message = messageInput?.value.trim() ||
-        `Lembrete de ${type.toLowerCase()}`;
-      const time = $("#reminderTime")?.value || "";
-      const days = $$("[data-reminder-day]:checked")
-        .map(input => Number(input.value));
+    const type = $("#reminderType")?.value || "Personalizado";
+    const messageInput = $("#reminderMessage");
+    const message = messageInput?.value.trim() ||
+      `Lembrete de ${type.toLowerCase()}`;
+    const time = $("#reminderTime")?.value || "";
+    const days = $$("[data-reminder-day]:checked")
+      .map(input => Number(input.value));
 
-      if (!time) {
-        setText("#reminderStatus", "Escolha um horário para o lembrete.");
+    if (!time) {
+      setText("#reminderStatus", "Escolha um horário para o lembrete.");
+      return;
+    }
+
+    if (!days.length) {
+      setText("#reminderStatus", "Selecione pelo menos um dia da semana.");
+      return;
+    }
+
+    const reminders = getReminders();
+    const isEditing = Boolean(editingReminderId);
+
+    if (isEditing) {
+      const index = reminders.findIndex(
+        item => item.id === editingReminderId
+      );
+
+      if (index === -1) {
+        setText("#reminderStatus", "Lembrete não encontrado.");
+        editingReminderId = null;
         return;
       }
 
-      if (!days.length) {
-        setText("#reminderStatus", "Selecione pelo menos um dia da semana.");
-        return;
-      }
-
-      const reminders = getReminders();
-
+      reminders[index] = {
+        ...reminders[index],
+        type,
+        message,
+        time,
+        days
+      };
+    } else {
       reminders.push({
         id: uid(),
         type,
@@ -2865,23 +2886,38 @@ function initReminders() {
         time,
         days
       });
+    }
 
-      if (save(REMINDERS_KEY, reminders)) {
-        if (messageInput) messageInput.value = "";
+    if (save(REMINDERS_KEY, reminders)) {
+      editingReminderId = null;
 
-        $$("[data-reminder-day]").forEach(input => {
-          input.checked = false;
-        });
+      if (messageInput) messageInput.value = "";
+      $("#reminderType").selectedIndex = 0;
+      $("#reminderTime").value = "";
 
-        setText("#reminderStatus", "Lembrete salvo com sucesso!");
-        syncExistingReminders();
-        renderReminders();
-        showToast("Lembrete salvo!");
-      }
-    });
-  }
+      $$("[data-reminder-day]").forEach(input => {
+        input.checked = false;
+      });
 
-  
+      saveButton.textContent = "Salvar lembrete";
+
+      setText(
+        "#reminderStatus",
+        isEditing
+          ? "Alterações salvas. Sincronizando com a nuvem..."
+          : "Lembrete salvo com sucesso!"
+      );
+
+      syncExistingReminders();
+      renderReminders();
+
+      showToast(
+        isEditing ? "Lembrete atualizado!" : "Lembrete salvo!"
+      );
+    }
+  });
+}
+
   if (list) {
     list.addEventListener("click", async event => {
       const editButton = event.target.closest("[data-edit-reminder]");
