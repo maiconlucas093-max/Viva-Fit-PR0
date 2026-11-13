@@ -2537,6 +2537,7 @@ function renderReminders() {
 function initReminders() {
   const saveButton = $("#reminderSave");
   const list = $("#reminderList");
+  let editingReminderId = null;
     // Ativa notificações push neste celular e salva a inscrição no Supabase.
   const pushButton = $("#enablePushNotifications");
   const pushStatus = $("#pushNotificationStatus");
@@ -2883,8 +2884,33 @@ function initReminders() {
   
   if (list) {
     list.addEventListener("click", async event => {
-      const button = event.target.closest("[data-delete-reminder]");
-      if (!button) return;
+      const editButton = event.target.closest("[data-edit-reminder]");
+
+if (editButton) {
+  const id = editButton.dataset.editReminder;
+  const reminder = getReminders().find(item => item.id === id);
+  
+  if (!reminder) return;
+  
+  editingReminderId = reminder.id;
+  
+  $("#reminderType").value = reminder.type;
+  $("#reminderMessage").value = reminder.message;
+  $("#reminderTime").value = reminder.time;
+  
+  $$("[data-reminder-day]").forEach(input => {
+    input.checked = reminder.days.includes(Number(input.value));
+  });
+  
+  saveButton.textContent = "Salvar alterações";
+  setText("#reminderStatus", "Editando lembrete. Faça as alterações no formulário.");
+  $("#reminderMessage")?.focus();
+  
+  return;
+}
+
+const button = event.target.closest("[data-delete-reminder]");
+if (!button) return;
 
       const id = button.dataset.deleteReminder;
       const currentReminders = getReminders();
