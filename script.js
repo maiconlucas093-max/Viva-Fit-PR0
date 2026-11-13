@@ -3298,7 +3298,10 @@ init();
 
   const KCAL_PER_MIN = 7; // estimativa simples
   const COLORS = { workouts: "#ff5a5f", minutes: "#b9f36b", kcal: "#f5b83d" };
-  const state = { days: 7, selected: -1, series: null };
+  const reportMonthSelect = $("#reportMonth");
+const now = new Date();
+const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+const state = { days: 7, mode: "days", monthKey: currentMonthKey, selected: -1, series: null };
 
   const isoOf = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
@@ -3312,6 +3315,62 @@ init();
       const minutes = done.reduce((sum, a) => sum + (Number(a.minutes) || 0), 0);
       list.push({ iso, date: d, workouts: done.length, minutes, kcal: minutes * KCAL_PER_MIN });
     }
+    
+  function populateMonthOptions() {
+    if (!reportMonthSelect) return;
+
+    const current = new Date();
+    const currentKey = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}`;
+    const dates = activities
+      .filter(a => a.date && /^\d{4}-\d{2}-\d{2}$/.test(a.date))
+      .map(a => a.date)
+      .sort();
+
+    const firstDate = dates.length ? new Date(`${dates[0]}T12:00:00`) : current;
+    const first = new Date(firstDate.getFullYear(), firstDate.getMonth(), 1);
+    const last = new Date(current.getFullYear(), current.getMonth(), 1);
+    const options = [];
+
+    for (let d = new Date(first); d <= last; d.setMonth(d.getMonth() + 1)) {
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      const option = document.createElement("option");
+      option.value = key;
+      option.textContent = d.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+      options.push(option);
+    }
+
+    reportMonthSelect.replaceChildren(...options);
+
+    if (!options.some(option => option.value === state.monthKey)) {
+      state.monthKey = currentKey;
+    }
+
+    reportMonthSelect.value = state.monthKey;
+  }
+
+  function collectMonth(monthKey) {
+    const [year, month] = monthKey.split("-").map(Number);
+    const totalDays = new Date(year, month, 0).getDate();
+    const list = [];
+
+    for (let day = 1; day <= totalDays; day++) {
+      const d = new Date(year, month - 1, day);
+      const iso = isoOf(d);
+      const done = activities.filter(a => a.done && a.date === iso);
+      const minutes = done.reduce((sum, a) => sum + (Number(a.minutes) || 0), 0);
+
+      list.push({
+        iso,
+        date: d,
+        workouts: done.length,
+        minutes,
+        kcal: minutes * KCAL_PER_MIN
+      });
+    }
+
+    return list;
+  }
+
     return list;
   }
 
@@ -3429,14 +3488,16 @@ init();
     ctx.fillStyle = "#8a9a83";
     ctx.font = "10px sans-serif";
     ctx.textBaseline = "top";
-    const labelIdx = state.days === 7
-      ? data.map((_, i) => i)
-      : [0, 7, 14, 21, 29].filter(i => i < n);
+    const labelIdx = state.mode === "month" ?
+  [...new Set([0, 7, 14, 21, n - 1])] :
+  state.days === 7 ?
+  data.map((_, i) => i) :
+  [0, 7, 14, 21, 29].filter(i => i < n);
     labelIdx.forEach(i => {
       const d = data[i].date;
-      const text = state.days === 7
-        ? d.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "")
-        : d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+      const text = state.days === 7 && state.mode !== "month" ?
+  d.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "") :
+  d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
       ctx.textAlign = i === 0 ? "left" : i === n - 1 ? "right" : "center";
       ctx.fillText(text, xAt(i), top + plotH + 9);
     });
@@ -3523,7 +3584,9 @@ init();
   }
 
   function render() {
-    state.series = collect(state.days);
+    state.series = state.mode === "month" ?
+  collectMonth(state.monthKey) :
+  collect(state.days);
     if (state.selected >= state.series.length) state.selected = -1;
     const sum = k => state.series.reduce((s, d) => s + d[k], 0);
 
