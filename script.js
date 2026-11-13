@@ -2654,7 +2654,70 @@ function initReminders() {
       }
     });
   }
-
+  // Sincroniza os lembretes locais com o Supabase.
+  async function syncReminderToSupabase(reminder, userId) {
+    const client = window.vivaFitSupabase;
+    
+    if (!client) {
+      throw new Error("Cliente Supabase não inicializado.");
+    }
+    
+    // Cria um identificador UUID estável para o registro remoto.
+    if (!reminder.remoteId) {
+      reminder.remoteId = window.crypto.randomUUID();
+      
+      // Guarda o identificador localmente para evitar duplicações.
+      save(REMINDERS_KEY, getReminders());
+    }
+    
+    const { error } = await client
+      .from("reminders")
+      .upsert({
+        id: reminder.remoteId,
+        user_id: userId,
+        type: reminder.type,
+        message: reminder.message,
+        reminder_time: reminder.time,
+        days: reminder.days,
+        active: true
+      }, {
+        onConflict: "id"
+      });
+    
+    if (error) throw error;
+  }
+  
+  async function syncExistingReminders() {
+    try {
+      const client = window.vivaFitSupabase;
+      if (!client) return;
+      
+      const { data, error } = await client.auth.getSession();
+      
+      if (error) throw error;
+      
+      const user = data.session?.user;
+      if (!user) return;
+      
+      const reminders = getReminders();
+      
+      for (const reminder of reminders) {
+        try {
+          await syncReminderToSupabase(reminder, user.id);
+        } catch (error) {
+          console.error(
+            "Erro ao sincronizar lembrete:",
+            reminder.message,
+            error
+          );
+        }
+      }
+      
+      console.info("Sincronização dos lembretes concluída.");
+    } catch (error) {
+      console.error("Erro na sincronização dos lembretes:", error);
+    }
+  }
   let reminderAudioContext = null;
 
   function unlockReminderSound() {
@@ -2794,6 +2857,7 @@ function initReminders() {
         });
 
         setText("#reminderStatus", "Lembrete salvo com sucesso!");
+        syncExistingReminders();
         renderReminders();
         showToast("Lembrete salvo!");
       }
