@@ -2667,7 +2667,15 @@ function initReminders() {
       reminder.remoteId = window.crypto.randomUUID();
       
       // Guarda o identificador localmente para evitar duplicações.
-      save(REMINDERS_KEY, getReminders());
+            const localReminders = getReminders();
+      const localReminder = localReminders.find(
+        item => item.id === reminder.id
+      );
+      
+      if (localReminder) {
+        localReminder.remoteId = reminder.remoteId;
+        save(REMINDERS_KEY, localReminders);
+      }
     }
     
     const { error } = await client
