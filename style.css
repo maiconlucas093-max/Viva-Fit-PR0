@@ -593,6 +593,32 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: va
 .report-tabs { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid rgba(185, 243, 107, .28); border-radius: 14px; background: rgba(255, 255, 255, .04); }
 .report-tab { border: 0; background: transparent; color: #9aa894; font-weight: 700; font-size: .8rem; padding: 8px 14px; border-radius: 10px; }
 .report-tab.active { background: var(--lime-grad); color: #10200a; box-shadow: 0 4px 16px rgba(185, 243, 107, .3); }
+/* Seletor de mês do relatório */
+.report-month-select {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  margin: 12px 0 16px;
+  padding: 11px 14px;
+  border: 1px solid rgba(185, 243, 107, .35);
+  border-radius: 12px;
+  background: #15200f;
+  color: #e8f2df;
+  font-size: .88rem;
+  font-weight: 700;
+  outline: none;
+  color-scheme: dark;
+}
+
+.report-month-select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(185, 243, 107, .12);
+}
+
+.report-month-select option {
+  background: #15200f;
+  color: #e8f2df;
+}
 .report-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
 .report-card { min-width: 0; padding: 16px; border-radius: 20px; border: 1px solid rgba(185, 243, 107, .20); background: linear-gradient(165deg, #15200f, #0d140b); box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .05); display: flex; flex-direction: column; }
 .report-card-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: .72rem; font-weight: 700; color: #94a18d; }
