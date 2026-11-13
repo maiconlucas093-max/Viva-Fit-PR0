@@ -232,10 +232,14 @@
     <section class="section-wrap content-section report-section" id="relatorio" aria-labelledby="reportTitle">
       <div class="section-heading">
         <div><span class="eyebrow">SEUS NÚMEROS</span><h2 id="reportTitle">Relatório de treino</h2><p class="section-description">Calculado com as atividades que você marcou como concluídas.</p></div>
-        <div class="report-tabs" role="group" aria-label="Período do relatório">
-          <button type="button" class="report-tab active" data-days="7">7 dias</button>
-          <button type="button" class="report-tab" data-days="30">30 dias</button>
-        </div>
+        
+<div class="report-tabs" role="group" aria-label="Período do relatório">
+  <button type="button" class="report-tab active" data-days="7">7 dias</button>
+  <button type="button" class="report-tab" data-days="30">30 dias</button>
+  <button type="button" class="report-tab" data-period="month">Mensal</button>
+</div>
+<select id="reportMonth" class="report-month-select" aria-label="Escolher mês do relatório" hidden></select>
+
       </div>
       <div class="report-cards">
         <article class="report-card">
