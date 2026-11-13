@@ -2516,10 +2516,18 @@ function renderReminders() {
           <p>${escapeHTML(reminder.message)}</p>
           <small>${escapeHTML(reminder.time)} · ${escapeHTML(days)}</small>
         </div>
-        <button type="button" class="btn btn-secondary"
-          data-delete-reminder="${escapeHTML(reminder.id)}">
-          Excluir
-        </button>
+
+        <div class="reminder-actions">
+          <button type="button" class="btn btn-secondary"
+            data-edit-reminder="${escapeHTML(reminder.id)}">
+            Editar
+          </button>
+
+          <button type="button" class="btn btn-secondary"
+            data-delete-reminder="${escapeHTML(reminder.id)}">
+            Excluir
+          </button>
+        </div>
       </div>
     `;
   }).join("");
