@@ -2872,21 +2872,55 @@ function initReminders() {
     });
   }
 
+  
   if (list) {
-    list.addEventListener("click", event => {
+    list.addEventListener("click", async event => {
       const button = event.target.closest("[data-delete-reminder]");
       if (!button) return;
 
       const id = button.dataset.deleteReminder;
-      const reminders = getReminders()
-        .filter(item => item.id !== id);
+      const currentReminders = getReminders();
+      const reminderToDelete = currentReminders.find(
+        item => item.id === id
+      );
 
-      if (save(REMINDERS_KEY, reminders)) {
-        renderReminders();
-        showToast("Lembrete excluído!");
+      if (!reminderToDelete) return;
+
+      try {
+        const client = window.vivaFitSupabase;
+
+        if (client && reminderToDelete.remoteId) {
+          const { data, error } = await client.auth.getSession();
+
+          if (error) throw error;
+
+          const user = data.session?.user;
+
+          if (user) {
+            const { error: deleteError } = await client
+              .from("reminders")
+              .delete()
+              .eq("id", reminderToDelete.remoteId)
+              .eq("user_id", user.id);
+
+            if (deleteError) throw deleteError;
+          }
+        }
+
+        const reminders = getReminders()
+          .filter(item => item.id !== id);
+
+        if (save(REMINDERS_KEY, reminders)) {
+          renderReminders();
+          showToast("Lembrete excluído!");
+        }
+      } catch (error) {
+        console.error("Erro ao excluir lembrete do Supabase:", error);
+        showToast("Não foi possível excluir o lembrete da nuvem.");
       }
     });
   }
+
 
   renderReminders();
 
