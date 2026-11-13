@@ -3305,17 +3305,29 @@ const state = { days: 7, mode: "days", monthKey: currentMonthKey, selected: -1, 
 
   const isoOf = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
+  
   function collect(days) {
     const list = [];
     const base = new Date();
+
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() - i);
       const iso = isoOf(d);
       const done = activities.filter(a => a.done && a.date === iso);
       const minutes = done.reduce((sum, a) => sum + (Number(a.minutes) || 0), 0);
-      list.push({ iso, date: d, workouts: done.length, minutes, kcal: minutes * KCAL_PER_MIN });
+
+      list.push({
+        iso,
+        date: d,
+        workouts: done.length,
+        minutes,
+        kcal: minutes * KCAL_PER_MIN
+      });
     }
-    
+
+    return list;
+  }
+
   function populateMonthOptions() {
     if (!reportMonthSelect) return;
 
@@ -3335,7 +3347,10 @@ const state = { days: 7, mode: "days", monthKey: currentMonthKey, selected: -1, 
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
       const option = document.createElement("option");
       option.value = key;
-      option.textContent = d.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+      option.textContent = d.toLocaleDateString("pt-BR", {
+        month: "long",
+        year: "numeric"
+      });
       options.push(option);
     }
 
@@ -3371,8 +3386,6 @@ const state = { days: 7, mode: "days", monthKey: currentMonthKey, selected: -1, 
     return list;
   }
 
-    return list;
-  }
 
   function setupCanvas(canvas) {
     const rect = canvas.getBoundingClientRect();
