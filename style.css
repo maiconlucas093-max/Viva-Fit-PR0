@@ -565,7 +565,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: va
 /* Barra inferior estilo app (só no celular) */
 .bottom-nav { display: none; }
 @media (max-width: 700px) {
-  body { padding-bottom: 98px; }
+  body {
+  padding-bottom: calc(98px + env(safe-area-inset-bottom, 0px));
+}
   .toast { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   .bottom-nav {
     display: flex; align-items: center; justify-content: space-between;
