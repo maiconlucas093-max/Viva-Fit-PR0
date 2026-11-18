@@ -3346,7 +3346,7 @@ init();
 /* ---------- Barra inferior: destaca a seção que está na tela ---------- */
 (function initBottomNav() {
   const links = $$("#bottomNav a");
-  if (!links.length || !("IntersectionObserver" in window)) return;
+  if (!links.length) return;
 
   const setActive = id => links.forEach(a => a.classList.toggle("active", a.dataset.section === id));
     const syncWithHash = () => {
@@ -3377,14 +3377,18 @@ init();
   window.addEventListener("hashchange", syncWithHash);
   syncWithHash();
 
+  if ("IntersectionObserver" in window) {
   const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.id); });
+    entries.forEach(entry => {
+      if (entry.isIntersecting) setActive(entry.target.id);
+    });
   }, { rootMargin: "-35% 0px -55% 0px" });
-
+  
   links.forEach(a => {
     const section = document.getElementById(a.dataset.section);
     if (section) observer.observe(section);
   });
+}
 })();
 
 /* ---------- Relatório de treino (gráficos) ---------- */
