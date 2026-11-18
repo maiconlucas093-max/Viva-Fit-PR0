@@ -683,6 +683,33 @@ function initNavigation() {
       
   
       const homeView = document.getElementById("homeView");
+      const homeHero = document.querySelector("#homeView .hero");
+const homeDashboard = document.querySelector("#homeView .dashboard-section");
+const homeSteps = document.getElementById("passos");
+const homeReport = document.getElementById("relatorio");
+const homeWorkouts = document.getElementById("treinos");
+const homeGoals = document.getElementById("metas");
+const homeProgress = document.getElementById("progresso");
+
+function updateHomeSections(hash) {
+  const page = hash || "#inicio";
+  
+  const isHome = page === "#inicio";
+  const isWorkout = page === "#treinos" || page === "#passos";
+  const isProgress = [
+    "#progresso",
+    "#relatorio",
+    "#metas"
+  ].includes(page);
+  
+  if (homeHero) homeHero.hidden = !isHome;
+  if (homeDashboard) homeDashboard.hidden = !isHome;
+  if (homeSteps) homeSteps.hidden = !isWorkout;
+  if (homeWorkouts) homeWorkouts.hidden = !isWorkout;
+  if (homeReport) homeReport.hidden = !isProgress;
+  if (homeGoals) homeGoals.hidden = !isProgress;
+  if (homeProgress) homeProgress.hidden = !isProgress;
+}
   const contentView = document.getElementById("contentView");
   const blogSection = document.getElementById("blog");
 const storeSection = document.getElementById("loja");
@@ -711,6 +738,9 @@ const showStore = hash === "#loja";
     const showReminders = hash === "#lembretes";
     const showExerciseLibrary = hash === "#biblioteca-exercicios";
     if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration || showWeightEvolution || showReminders || showExerciseLibrary;
+    if (homeView && !homeView.hidden) {
+  updateHomeSections(hash);
+}
     if (contentView) contentView.hidden = !showContent;
     if (blogSection) blogSection.hidden = !showBlog;
 if (storeBanner) storeBanner.hidden = !showStore;
