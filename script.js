@@ -684,6 +684,10 @@ function initNavigation() {
   
       const homeView = document.getElementById("homeView");
   const contentView = document.getElementById("contentView");
+  const blogSection = document.getElementById("blog");
+const storeSection = document.getElementById("loja");
+const storeBanner = document.querySelector(".store-banner");
+const newsletterSection = document.querySelector(".newsletter-section");
   const featuresHubView = document.getElementById("featuresHubView");
   const weeklyEvolutionView = document.getElementById("weeklyEvolutionView");
   const achievementsView = document.getElementById("achievementsView");
@@ -695,6 +699,8 @@ function initNavigation() {
   const exerciseLibraryView = document.getElementById("exerciseLibraryView");
   function updateAppViews(hash = window.location.hash) {
     const showContent = hash === "#blog" || hash === "#loja";
+    const showBlog = hash === "#blog";
+const showStore = hash === "#loja";
     const showFeatures = hash === "#funcoes";
     const showWeeklyEvolution = hash === "#evolucao-semanal";
     const showAchievements = hash === "#conquistas";
@@ -706,6 +712,10 @@ function initNavigation() {
     const showExerciseLibrary = hash === "#biblioteca-exercicios";
     if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration || showWeightEvolution || showReminders || showExerciseLibrary;
     if (contentView) contentView.hidden = !showContent;
+    if (blogSection) blogSection.hidden = !showBlog;
+if (storeBanner) storeBanner.hidden = !showStore;
+if (storeSection) storeSection.hidden = !showStore;
+if (newsletterSection) newsletterSection.hidden = !showStore;
     if (featuresHubView) featuresHubView.hidden = !showFeatures;
     if (weeklyEvolutionView) weeklyEvolutionView.hidden = !showWeeklyEvolution;
     if (achievementsView) achievementsView.hidden = !showAchievements;

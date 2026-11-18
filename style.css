@@ -1641,3 +1641,70 @@ a.feature-hub-card {
   text-align: center;
   padding: 12px;
 }
+
+/* =========================================
+   VIVAFIT PRO — NAVEGAÇÃO LATERAL DESKTOP
+   ========================================= */
+
+@media (min-width: 900px) {
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    height: 100vh;
+    padding: 25px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 28px;
+    border-right: 1px solid var(--line);
+    border-bottom: 0;
+    overflow-y: auto;
+  }
+
+  .brand {
+    align-self: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 7px;
+  }
+
+  .nav-link {
+    display: block;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 11px;
+  }
+
+  .top-cta {
+    display: block;
+    width: 100%;
+    margin-top: auto;
+    text-align: center;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  main {
+    margin-left: 250px;
+  }
+
+  .footer {
+    margin-left: 250px;
+  }
+
+  .bottom-nav {
+    display: none !important;
+  }
+}
