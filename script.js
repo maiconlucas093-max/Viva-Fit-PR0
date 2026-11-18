@@ -3349,6 +3349,33 @@ init();
   if (!links.length || !("IntersectionObserver" in window)) return;
 
   const setActive = id => links.forEach(a => a.classList.toggle("active", a.dataset.section === id));
+    const syncWithHash = () => {
+    const hash = window.location.hash || "#inicio";
+    
+    const sectionMap = {
+      "#passos": "treinos",
+      "#relatorio": "progresso",
+      "#metas": "progresso",
+      "#evolucao-semanal": "",
+      "#conquistas": "",
+      "#calendario": "",
+      "#evolucao-caminhadas": "",
+      "#hidratacao": "",
+      "#evolucao-peso": "",
+      "#lembretes": "",
+      "#biblioteca-exercicios": "",
+      "#funcoes": ""
+    };
+    
+    const activeSection = Object.prototype.hasOwnProperty.call(sectionMap, hash) ?
+      sectionMap[hash] :
+      hash.replace("#", "");
+    
+    setActive(activeSection);
+  };
+  
+  window.addEventListener("hashchange", syncWithHash);
+  syncWithHash();
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.id); });
