@@ -1824,3 +1824,57 @@ a.feature-hub-card {
     font-size: 1.55rem;
   }
 }
+
+/* =========================================
+   VIVAFIT PRO — ACESSO RÁPIDO DA HOME
+   ========================================= */
+
+#homeView .home-quick-section {
+  padding-top: 8px;
+  padding-bottom: 28px;
+}
+
+#homeView .home-quick-section .section-heading {
+  margin-bottom: 14px;
+}
+
+#homeView .home-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+#homeView .home-quick-grid .feature-hub-card {
+  min-height: 76px;
+  padding: 12px;
+  justify-content: flex-start;
+}
+
+#homeView .home-quick-grid .feature-hub-card > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+#homeView .home-quick-grid .feature-hub-card small {
+  color: var(--muted, #777);
+  font-size: .72rem;
+  font-weight: 400;
+}
+
+#homeView .quick-icon {
+  font-size: 1.3rem;
+}
+
+@media (max-width: 700px) {
+  #homeView .home-quick-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  #homeView .home-quick-grid .feature-hub-card {
+    min-height: 72px;
+    padding: 10px;
+  }
+}
