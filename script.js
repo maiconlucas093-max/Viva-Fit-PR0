@@ -737,35 +737,19 @@ const showStore = hash === "#loja";
     const showWeightEvolution = hash === "#evolucao-peso";
     const showReminders = hash === "#lembretes";
     const showExerciseLibrary = hash === "#biblioteca-exercicios";
-        let activeHash = hash || "#inicio";
-    
-    if (activeHash === "#passos") {
-      activeHash = "#treinos";
-    }
-    
-    if (["#relatorio", "#metas"].includes(activeHash)) {
-      activeHash = "#progresso";
-    }
-    
-    if ([
-        "#evolucao-semanal",
-        "#conquistas",
-        "#calendario",
-        "#evolucao-caminhadas",
-        "#hidratacao",
-        "#evolucao-peso",
-        "#lembretes",
-        "#biblioteca-exercicios"
-      ].includes(activeHash)) {
-      activeHash = "#funcoes";
-    }
-    
+        
+    const activeHash = hash || "#inicio";
+
     document.querySelectorAll(".nav-link").forEach(link => {
-      link.classList.toggle(
-        "active",
-        link.getAttribute("href") === activeHash
-      );
+      const linkHash = link.getAttribute("href");
+
+      const isActive =
+        linkHash === activeHash ||
+        (activeHash === "#relatorio" && linkHash === "#progresso");
+
+      link.classList.toggle("active", isActive);
     });
+
     if (homeView) homeView.hidden = showContent || showFeatures || showWeeklyEvolution || showAchievements || showCalendar || showWalkingEvolution || showHydration || showWeightEvolution || showReminders || showExerciseLibrary;
     if (homeView && !homeView.hidden) {
   updateHomeSections(hash);
