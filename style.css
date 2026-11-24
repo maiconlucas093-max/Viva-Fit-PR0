@@ -1776,3 +1776,51 @@ a.feature-hub-card {
     font-size: clamp(2rem, 9vw, 2.8rem);
   }
 }
+
+/* =========================================
+   VIVAFIT PRO — MÓDULO 02
+   Etapa 2: painel inicial compacto
+   ========================================= */
+
+#homeView .dashboard-section {
+  padding-bottom: 22px;
+}
+
+#homeView .dashboard-section .section-heading {
+  margin-bottom: 16px;
+}
+
+#homeView .stats-grid {
+  gap: 12px;
+}
+
+#homeView .stat-card {
+  padding: 15px;
+}
+
+#homeView .stat-number {
+  margin-top: 10px;
+  font-size: 1.8rem;
+}
+
+#homeView .stat-card p {
+  margin-bottom: 10px;
+}
+
+#homeView .stat-card > small {
+  margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+  #homeView .stats-grid {
+    gap: 9px;
+  }
+
+  #homeView .stat-card {
+    padding: 12px;
+  }
+
+  #homeView .stat-number {
+    font-size: 1.55rem;
+  }
+}
