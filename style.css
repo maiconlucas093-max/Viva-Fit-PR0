@@ -1878,3 +1878,22 @@ a.feature-hub-card {
     padding: 10px;
   }
 }
+/* =========================================
+   VIVAFIT PRO — MÓDULO 02
+   Etapa 4: botões do banner no celular
+   ========================================= */
+
+@media (max-width: 700px) {
+  #homeView .hero-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  #homeView .hero-actions .btn {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+  }
+}
