@@ -1925,3 +1925,30 @@ a.feature-hub-card {
     height: 55px;
   }
 }
+
+/* =========================================
+   VIVAFIT PRO — MÓDULO 02
+   Etapa 6: espaçamento da página inicial
+   ========================================= */
+
+@media (max-width: 700px) {
+  #homeView .hero {
+    padding-top: 26px;
+    padding-bottom: 20px;
+    gap: 18px;
+  }
+
+  #homeView .hero-content > p {
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  #homeView .hero-proof {
+    margin-top: 18px;
+  }
+
+  #homeView .dashboard-section {
+    padding-top: 6px;
+    padding-bottom: 18px;
+  }
+}
